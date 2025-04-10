@@ -1,4 +1,4 @@
-# Misinformation Detection System
+# Fake News Detection System
 
 A full-stack application combining a DistilBERT-based classification model with fact-checking capabilities and explainable AI (XAI) features.
 
@@ -46,7 +46,7 @@ A full-stack application combining a DistilBERT-based classification model with 
 
     ```env
     FACT_CHECK_API_KEY=your_google_api_key
-    FLASK_ENV=development
+    FLASK_APP=app.py
 
 4. **Setting up Frontend**
 
