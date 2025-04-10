@@ -1,14 +1,37 @@
+/* ============================================= */
+/* CSS Variables & Base Styles                   */
+/* ============================================= */
+
 :root {
-  --primary-color: #3498db;
-  --secondary-color: #2980b9;
-  --real-color: #27ae60;
-  --fake-color: #e74c3c;
-  --neutral-color: #f39c12;
-  --text-color: #333;
-  --light-bg: #f5f8fa;
-  --gray-light: #ecf0f1;
-  --gray: #bdc3c7;
-  --gray-dark: #95a5a6;
+  /* New Primary Palette */
+  --primary-color: #1DCD9F;     /* Teal */
+  --secondary-color: #169976;   /* Dark Teal */
+  --base-black: #000000;
+  --base-dark-gray: #222222;
+
+  /* Status & Semantic Colors */
+  --real-color: #27ae60;        /* Green */
+  --fake-color: #e74c3c;        /* Red */
+  --neutral-color: #f39c12;     /* Orange/Yellow */
+  --error-color: var(--fake-color);
+
+  /* Light Mode UI Colors */
+  --background-color: #f5f8fa; /* Light Grayish Background */
+  --surface-color: #ffffff;    /* White for cards, inputs */
+  --text-color: var(--base-dark-gray); /* Main text */
+  --text-muted-color: #6c757d;  /* Muted gray text */
+  --text-on-primary: #ffffff;   /* Text on primary buttons */
+  --border-color: #dee2e6;     /* Standard border */
+  --border-color-light: #ecf0f1;/* Lighter border/bg */
+
+  /* Alpha Backgrounds (Light Mode) */
+  --real-bg-alpha: rgba(39, 174, 96, 0.1);
+  --fake-bg-alpha: rgba(231, 76, 60, 0.1);
+  --neutral-bg-alpha: rgba(243, 156, 18, 0.1);
+  --primary-bg-alpha: rgba(29, 205, 159, 0.1);
+  --error-bg-alpha: var(--fake-bg-alpha);
+
+  /* Common Styles */
   --border-radius: 8px;
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
@@ -24,7 +47,10 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: var(--text-color);
-  background-color: var(--light-bg);
+  background-color: var(--background-color);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .app {
@@ -33,14 +59,19 @@ body {
   min-height: 100vh;
 }
 
-/* Header Styles */
+/* ============================================= */
+/* Header                                        */
+/* ============================================= */
+
 .header {
-  background-color: #fff;
+  background-color: var(--surface-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid var(--border-color-light);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .logo {
@@ -60,6 +91,35 @@ body {
   color: var(--text-color);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-button {
+  background: none;
+  border: none;
+  color: var(--text-muted-color); /* Use muted color for less emphasis */
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: var(--transition);
+}
+
+.header-button:hover {
+  background-color: var(--primary-bg-alpha);
+  color: var(--primary-color);
+}
+
+.toggle-theme-button { /* Specific color potentially */
+   color: var(--primary-color);
+}
+
 .server-status {
   font-size: 0.85rem;
 }
@@ -71,16 +131,17 @@ body {
   padding: 0.4rem 0.8rem;
   border-radius: 1rem;
   font-weight: 500;
+  transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .status.online {
-  background-color: rgba(46, 204, 113, 0.1);
-  color: #27ae60;
+  background-color: var(--real-bg-alpha);
+  color: var(--real-color);
 }
 
 .status.offline {
-  background-color: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
+  background-color: var(--fake-bg-alpha);
+  color: var(--fake-color);
 }
 
 .status-dot {
@@ -90,14 +151,17 @@ body {
 }
 
 .status.online .status-dot {
-  background-color: #27ae60;
+  background-color: var(--real-color);
 }
 
 .status.offline .status-dot {
-  background-color: #e74c3c;
+  background-color: var(--fake-color);
 }
 
-/* Main Content */
+/* ============================================= */
+/* Main Content & Layout                         */
+/* ============================================= */
+
 .main-content {
   flex: 1;
   max-width: 1000px;
@@ -106,13 +170,18 @@ body {
   padding: 2rem;
 }
 
-/* Input Section */
+/* ============================================= */
+/* Input Section                                 */
+/* ============================================= */
+
 .input-section {
-  background-color: #fff;
+  background-color: var(--surface-color);
   padding: 2rem;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   margin-bottom: 2rem;
+  border: 1px solid transparent; /* For dark mode border */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .input-section h2 {
@@ -128,18 +197,26 @@ body {
 .text-input {
   width: 100%;
   padding: 1rem;
-  border: 2px solid var(--gray-light);
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   font-size: 1rem;
   resize: vertical;
   transition: var(--transition);
   min-height: 120px;
+  background-color: var(--surface-color); /* Ensure background is set */
+  color: var(--text-color); /* Ensure text color is set */
 }
+
+.text-input::placeholder {
+  color: var(--text-muted-color);
+  opacity: 0.8;
+}
+
 
 .text-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  box-shadow: 0 0 0 3px var(--primary-bg-alpha);
 }
 
 .submit-button {
@@ -147,7 +224,7 @@ body {
   bottom: 1rem;
   right: 1rem;
   background-color: var(--primary-color);
-  color: white;
+  color: var(--text-on-primary);
   border: none;
   border-radius: 4px;
   padding: 0.6rem 1.2rem;
@@ -157,43 +234,59 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: var(--transition);
+  transition: var(--transition), filter 0.2s ease;
 }
 
 .submit-button:hover {
   background-color: var(--secondary-color);
+  filter: brightness(105%);
 }
 
 .submit-button:disabled {
-  background-color: var(--gray);
+  background-color: var(--text-muted-color); /* Use muted color for disabled */
   cursor: not-allowed;
+  filter: brightness(100%);
+  opacity: 0.7;
 }
 
-/* Error Message */
+/* ============================================= */
+/* Error Message                                 */
+/* ============================================= */
+
 .error-message {
-  background-color: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
+  background-color: var(--error-bg-alpha);
+  color: var(--error-color);
   padding: 1rem;
   border-radius: var(--border-radius);
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
+  border: 1px solid var(--error-color);
 }
 
-/* Results Section */
+/* ============================================= */
+/* Results Section & Cards                       */
+/* ============================================= */
+
 .results-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* Result Card */
 .result-card {
-  background-color: #fff;
+  background-color: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   overflow: hidden;
+  border: 1px solid transparent; /* For dark mode */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .result-card.real {
@@ -206,22 +299,28 @@ body {
 
 .result-header {
   padding: 1.2rem 1.5rem;
-  background-color: var(--gray-light);
+  background-color: var(--border-color-light);
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid var(--border-color); /* Add subtle separator */
+  color: var(--text-color); /* Ensure text color */
 }
 
 .processing-time {
   font-size: 0.85rem;
   font-weight: normal;
-  color: var(--gray-dark);
+  color: var(--text-muted-color);
 }
 
 .result-content {
   padding: 1.5rem;
 }
+
+/* ============================================= */
+/* Prediction Display                            */
+/* ============================================= */
 
 .prediction-section {
   display: flex;
@@ -240,12 +339,12 @@ body {
 }
 
 .prediction-badge.real {
-  background-color: rgba(39, 174, 96, 0.1);
+  background-color: var(--real-bg-alpha);
   color: var(--real-color);
 }
 
 .prediction-badge.fake {
-  background-color: rgba(231, 76, 60, 0.1);
+  background-color: var(--fake-bg-alpha);
   color: var(--fake-color);
 }
 
@@ -255,7 +354,7 @@ body {
 
 .confidence-bar-container {
   height: 8px;
-  background-color: var(--gray-light);
+  background-color: var(--border-color-light);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -264,14 +363,19 @@ body {
   height: 100%;
   background-color: var(--primary-color);
   border-radius: 4px;
+  transition: width 0.5s ease-out; /* Animate width change */
 }
 
 .confidence-text {
   margin-top: 0.3rem;
   font-size: 0.85rem;
-  color: var(--gray-dark);
+  color: var(--text-muted-color);
   text-align: right;
 }
+
+/* ============================================= */
+/* Probability Distribution                      */
+/* ============================================= */
 
 .probability-distribution {
   margin-bottom: 1.5rem;
@@ -283,6 +387,7 @@ body {
   gap: 0.5rem;
   margin-bottom: 0.8rem;
   font-weight: 500;
+  color: var(--text-color);
 }
 
 .probability-item {
@@ -309,35 +414,64 @@ body {
   display: flex;
   align-items: center;
   height: 24px;
-  background-color: var(--gray-light);
+  background-color: var(--border-color-light);
   border-radius: 4px;
   overflow: hidden;
   position: relative;
   margin-left: 1rem;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .probability-bar {
   height: 100%;
   border-radius: 4px;
+  transition: width 0.5s ease-out; /* Animate width change */
 }
 
 .probability-item.real .probability-bar {
-  background-color: rgba(39, 174, 96, 0.2);
+  background-color: var(--real-bg-alpha); /* Use alpha */
 }
 
 .probability-item.fake .probability-bar {
-  background-color: rgba(231, 76, 60, 0.2);
+  background-color: var(--fake-bg-alpha); /* Use alpha */
+}
+
+/* Overlay solid color on top of alpha background for better visual */
+.probability-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%; /* This covers the parent's width */
+    border-radius: 4px;
+}
+
+.probability-item.real .probability-bar::before {
+    background-color: var(--real-color);
+    opacity: 0.6; /* Adjust opacity */
+}
+
+.probability-item.fake .probability-bar::before {
+    background-color: var(--fake-color);
+    opacity: 0.6; /* Adjust opacity */
 }
 
 .probability-value {
   position: absolute;
   right: 10px;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600; /* Make it bolder */
+  color: var(--text-color); /* Ensure contrast */
+  z-index: 1; /* Sit on top of pseudo-element */
 }
 
+/* ============================================= */
+/* Explain Button                                */
+/* ============================================= */
+
 .explain-button {
-  background-color: #fff;
+  background-color: var(--surface-color);
   color: var(--primary-color);
   border: 1px solid var(--primary-color);
   border-radius: 4px;
@@ -348,19 +482,25 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: var(--transition);
+  transition: var(--transition), filter 0.2s ease;
 }
 
 .explain-button:hover {
-  background-color: rgba(52, 152, 219, 0.1);
+  background-color: var(--primary-bg-alpha);
+  filter: brightness(105%);
 }
 
-/* Fact Check Results */
+/* ============================================= */
+/* Fact Check Section                            */
+/* ============================================= */
+
 .fact-check-section {
-  background-color: #fff;
+  background-color: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   padding: 1.5rem;
+  border: 1px solid transparent; /* For dark mode */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .fact-check-section h3 {
@@ -369,6 +509,7 @@ body {
   gap: 0.5rem;
   margin-bottom: 1.2rem;
   font-weight: 600;
+  color: var(--text-color);
 }
 
 .claims-list {
@@ -378,7 +519,7 @@ body {
 }
 
 .claim-item {
-  border: 1px solid var(--gray-light);
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   padding: 1rem;
   display: flex;
@@ -393,11 +534,12 @@ body {
 .claim-text {
   font-style: italic;
   margin-bottom: 0.5rem;
+  color: var(--text-color);
 }
 
 .claim-claimant {
   font-size: 0.9rem;
-  color: var(--gray-dark);
+  color: var(--text-muted-color);
 }
 
 .claim-rating {
@@ -415,23 +557,23 @@ body {
 }
 
 .rating-badge.true {
-  background-color: rgba(39, 174, 96, 0.1);
+  background-color: var(--real-bg-alpha);
   color: var(--real-color);
 }
 
 .rating-badge.false {
-  background-color: rgba(231, 76, 60, 0.1);
+  background-color: var(--fake-bg-alpha);
   color: var(--fake-color);
 }
 
 .rating-badge.mixed {
-  background-color: rgba(243, 156, 18, 0.1);
+  background-color: var(--neutral-bg-alpha);
   color: var(--neutral-color);
 }
 
 .rating-badge.unknown {
-  background-color: var(--gray-light);
-  color: var(--gray-dark);
+  background-color: var(--border-color-light);
+  color: var(--text-muted-color);
 }
 
 .source-link {
@@ -445,24 +587,33 @@ body {
 
 .source-link:hover {
   text-decoration: underline;
+  color: var(--secondary-color);
 }
 
 .no-claims {
-  color: var(--gray-dark);
+  color: var(--text-muted-color);
   font-style: italic;
+  padding: 1rem;
+  text-align: center;
 }
 
-/* Feedback Form */
+/* ============================================= */
+/* Feedback Form                                 */
+/* ============================================= */
+
 .feedback-form {
-  background-color: #fff;
+  background-color: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   padding: 1.5rem;
+  border: 1px solid transparent; /* For dark mode */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .feedback-form h3 {
   margin-bottom: 1.2rem;
   font-weight: 600;
+  color: var(--text-color);
 }
 
 .feedback-question {
@@ -472,6 +623,7 @@ body {
 .feedback-question p {
   margin-bottom: 0.8rem;
   font-weight: 500;
+  color: var(--text-color);
 }
 
 .feedback-buttons {
@@ -480,8 +632,9 @@ body {
 }
 
 .feedback-button {
-  background-color: #fff;
-  border: 1px solid var(--gray);
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
   border-radius: 4px;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
@@ -489,16 +642,17 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: var(--transition);
+  transition: var(--transition), filter 0.2s ease;
 }
 
 .feedback-button:hover {
   border-color: var(--primary-color);
+  background-color: var(--primary-bg-alpha);
 }
 
 .feedback-button.selected {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--text-on-primary);
   border-color: var(--primary-color);
 }
 
@@ -509,6 +663,7 @@ body {
 .correct-label-selection p {
   margin-bottom: 0.8rem;
   font-weight: 500;
+  color: var(--text-color);
 }
 
 .label-options {
@@ -517,48 +672,54 @@ body {
 }
 
 .label-option {
-  background-color: #fff;
-  border: 1px solid var(--gray);
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
   border-radius: 4px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition), filter 0.2s ease;
 }
 
 .label-option:hover {
   border-color: var(--primary-color);
+  background-color: var(--primary-bg-alpha);
 }
 
 .label-option.selected {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--text-on-primary);
   border-color: var(--primary-color);
 }
 
 .submit-feedback {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--text-on-primary);
   border: none;
   border-radius: 4px;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition), filter 0.2s ease;
+  margin-top: 1rem; /* Add some spacing */
 }
 
 .submit-feedback:hover {
   background-color: var(--secondary-color);
+  filter: brightness(105%);
 }
 
 .submit-feedback:disabled {
-  background-color: var(--gray);
+  background-color: var(--text-muted-color);
   cursor: not-allowed;
+  filter: brightness(100%);
+  opacity: 0.7;
 }
 
 .feedback-submitted {
-  background-color: #fff;
+  background-color: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   padding: 1.5rem;
@@ -570,10 +731,12 @@ body {
   text-align: center;
   max-width: 480px;
   margin: 2rem auto;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   font-size: 1rem;
   line-height: 1.5;
+  border: 1px solid var(--border-color);
 }
+
 .feedback-submitted .icon {
   font-size: 2rem;
   color: var(--primary-color);
@@ -584,138 +747,28 @@ body {
 }
 
 
-/* Dark Mode Styles */
-body.dark-mode {
-  background-color: #1a202c;
-  color: #e2e8f0;
-}
+/* ============================================= */
+/* Search History                                */
+/* ============================================= */
 
-.app.dark-mode {
-  --text-color: #e2e8f0;
-  --light-bg: #2d3748;
-  --gray-light: #4a5568;
-  --gray: #718096;
-  --gray-dark: #a0aec0;
-}
-
-.dark-mode .header,
-.dark-mode .input-section,
-.dark-mode .result-card,
-.dark-mode .fact-check-section,
-.dark-mode .feedback-form,
-.dark-mode .search-history {
-  background-color: #2d3748;
-  color: #e2e8f0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode .text-input {
-  background-color: #4a5568;
-  color: #e2e8f0;
-  border-color: #718096;
-}
-
-.dark-mode .text-input::placeholder {
-  color: #a0aec0;
-}
-
-.dark-mode .modal-overlay {
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
-.dark-mode .modal-content,
-.dark-mode .info-panel {
-  background-color: #2d3748;
-  color: #e2e8f0;
-}
-
-/* Info Panel Styles */
-.info-panel-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.info-panel {
-  background-color: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  width: 90%;
-  max-width: 700px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.info-panel-header {
-  padding: 1.2rem 1.5rem;
-  background-color: var(--gray-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--gray);
-}
-
-.info-panel-header h2 {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.info-panel-content {
-  padding: 1.5rem;
-}
-
-.info-section {
-  margin-bottom: 2rem;
-}
-
-.info-section h3 {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.info-section ul {
-  margin-left: 1.5rem;
-  margin-top: 0.5rem;
-}
-
-.info-section li {
-  margin-bottom: 0.5rem;
-}
-
-.info-footer {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--gray-light);
-  font-style: italic;
-}
-
-/* Search History Styles */
 .search-history {
-  background-color: white;
+  background-color: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   margin-top: 2rem;
   overflow: hidden;
+  border: 1px solid transparent; /* For dark mode */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .search-history-header {
   padding: 1rem 1.5rem;
-  background-color: var(--gray-light);
+  background-color: var(--border-color-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
 .search-history-header h3 {
@@ -730,7 +783,7 @@ body.dark-mode {
 .clear-history-button {
   background: none;
   border: none;
-  color: var(--gray-dark);
+  color: var(--text-muted-color);
   cursor: pointer;
   padding: 0.3rem;
   border-radius: 50%;
@@ -742,17 +795,19 @@ body.dark-mode {
 
 .clear-history-button:hover {
   color: var(--fake-color);
-  background-color: rgba(231, 76, 60, 0.1);
+  background-color: var(--fake-bg-alpha);
 }
 
 .history-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: 300px; /* Limit height */
+  overflow-y: auto; /* Add scroll */
 }
 
 .history-item {
-  border-bottom: 1px solid var(--gray-light);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .history-item:last-child {
@@ -769,11 +824,12 @@ body.dark-mode {
   background: none;
   border: none;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition), filter 0.2s ease;
+  color: var(--text-color); /* Ensure text color */
 }
 
 .history-button:hover {
-  background-color: var(--light-bg);
+  background-color: var(--primary-bg-alpha);
 }
 
 .history-icon {
@@ -798,19 +854,19 @@ body.dark-mode {
 }
 
 .history-badge.real {
-  background-color: rgba(39, 174, 96, 0.1);
+  background-color: var(--real-bg-alpha);
   color: var(--real-color);
 }
 
 .history-badge.fake {
-  background-color: rgba(231, 76, 60, 0.1);
+  background-color: var(--fake-bg-alpha);
   color: var(--fake-color);
 }
 
 .search-history-empty {
   padding: 2rem;
   text-align: center;
-  color: var(--gray-dark);
+  color: var(--text-muted-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -822,7 +878,139 @@ body.dark-mode {
   opacity: 0.6;
 }
 
-/* Loading Indicator Styles */
+/* ============================================= */
+/* Modals & Overlays (Including Info Panel)      */
+/* ============================================= */
+
+.modal-overlay, .info-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Consistent overlay darkness */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content, .info-panel {
+  background-color: var(--surface-color);
+  color: var(--text-color); /* Ensure text color */
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  width: 90%;
+  max-width: 700px; /* Max width for Info Panel */
+  max-height: 90vh;
+  overflow: hidden; /* Controlled by inner elements */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color); /* Add subtle border */
+}
+
+.modal-content { /* Specific modal width if needed */
+  max-width: 900px;
+}
+
+.modal-header, .info-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--border-color-light); /* Subtle header background */
+}
+
+.modal-header h2, .info-panel-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-color); /* Ensure header text color */
+}
+
+/* Close button styling can go here if needed */
+
+.modal-body, .info-panel-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1; /* Allow body to grow */
+}
+
+/* Info Panel Specifics */
+.info-section {
+  margin-bottom: 2rem;
+}
+
+.info-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.info-section ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  padding-left: 1rem; /* Ensure padding */
+}
+
+.info-section li {
+  margin-bottom: 0.5rem;
+  color: var(--text-color); /* Ensure list item color */
+}
+
+.info-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color-light);
+  font-style: italic;
+  color: var(--text-muted-color);
+}
+
+/* Explanation Content (inside Modal) */
+.explanation-content {
+  overflow: auto; /* Keep scroll within */
+}
+
+.explanation-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem; /* Spacing */
+}
+
+.explanation-content th,
+.explanation-content td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: left; /* Default alignment */
+}
+
+.explanation-content th {
+  background-color: var(--border-color-light);
+  font-weight: 600;
+}
+
+/* LIME specific styles */
+.explanation-content .lime-info {
+  margin-bottom: 1rem;
+}
+
+.explanation-content .lime-word {
+  display: inline-block;
+  padding: 2px 4px;
+  margin: 2px;
+  border-radius: 3px;
+  /* Colors applied dynamically via JS */
+}
+
+/* ============================================= */
+/* Loading Indicator                             */
+/* ============================================= */
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -837,10 +1025,11 @@ body.dark-mode {
   font-size: 2.5rem;
   color: var(--primary-color);
   margin-bottom: 1rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .loading-message {
-  color: var(--gray-dark);
+  color: var(--text-muted-color);
   font-size: 1.1rem;
 }
 
@@ -849,39 +1038,428 @@ body.dark-mode {
   100% { transform: rotate(360deg); }
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+/* ============================================= */
+/* Dark Mode Overrides                           */
+/* ============================================= */
+
+body.dark-mode {
+  /* Dark Mode Palette - Black/Gray based */
+  --primary-color: #1DCD9F;       /* Keep Teal */
+  --secondary-color: #169976;     /* Keep Dark Teal */
+
+  --background-color: var(--base-black);    /* Black Background */
+  --surface-color: var(--base-dark-gray); /* Dark Gray Surface */
+  --text-color: #e0e0e0;           /* Light Gray Text */
+  --text-muted-color: #a0a0a0;      /* Muted Light Gray Text */
+  --text-on-primary: #000000;       /* Black text on Teal buttons for contrast */
+  --border-color: #444444;         /* Darker Border */
+  --border-color-light: #333333;    /* Slightly lighter dark border/bg */
+
+  /* Alpha Backgrounds (Dark Mode) */
+  --real-bg-alpha: rgba(39, 174, 96, 0.2);   /* More subtle alpha */
+  --fake-bg-alpha: rgba(231, 76, 60, 0.2);   /* More subtle alpha */
+  --neutral-bg-alpha: rgba(243, 156, 18, 0.2); /* More subtle alpha */
+  --primary-bg-alpha: rgba(29, 205, 159, 0.15);/* More subtle alpha */
+  --error-bg-alpha: var(--fake-bg-alpha);
+
+  /* Darker Shadow */
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
-.header-button {
-  background: none;
-  border: none;
+/* Apply dark mode overrides */
+.dark-mode .header,
+.dark-mode .input-section,
+.dark-mode .result-card,
+.dark-mode .fact-check-section,
+.dark-mode .feedback-form,
+.dark-mode .search-history,
+.dark-mode .modal-content,
+.dark-mode .info-panel,
+.dark-mode .feedback-submitted {
+  background-color: var(--surface-color);
   color: var(--text-color);
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: var(--transition);
+  box-shadow: var(--shadow);
+  border-color: var(--border-color); /* Use dark border */
 }
 
-.header-button:hover {
-  background-color: var(--gray-light);
+.dark-mode .header {
+  border-bottom-color: var(--border-color);
 }
 
-.toggle-theme-button {
+.dark-mode .search-history-header,
+.dark-mode .modal-header,
+.dark-mode .info-panel-header {
+  background-color: var(--border-color-light);
+  border-bottom-color: var(--border-color);
+}
+
+.dark-mode .text-input {
+  background-color: var(--surface-color); /* Ensure input bg matches surface */
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.dark-mode .text-input::placeholder {
+  color: var(--text-muted-color);
+  opacity: 0.7;
+}
+
+.dark-mode .text-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-bg-alpha); /* Use primary alpha */
+}
+
+.dark-mode .result-header {
+  background-color: var(--border-color-light);
+  border-bottom-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.dark-mode .processing-time,
+.dark-mode .confidence-text,
+.dark-mode .claim-claimant,
+.dark-mode .search-history-empty,
+.dark-mode .info-footer {
+  color: var(--text-muted-color);
+}
+
+.dark-mode .status.online {
+  background-color: var(--real-bg-alpha);
+}
+
+.dark-mode .status.offline {
+  background-color: var(--fake-bg-alpha);
+}
+
+.dark-mode .prediction-badge.real,
+.dark-mode .rating-badge.true,
+.dark-mode .history-badge.real {
+  background-color: var(--real-bg-alpha);
+}
+
+.dark-mode .prediction-badge.fake,
+.dark-mode .rating-badge.false,
+.dark-mode .history-badge.fake {
+  background-color: var(--fake-bg-alpha);
+}
+
+.dark-mode .rating-badge.mixed {
+  background-color: var(--neutral-bg-alpha);
+}
+
+.dark-mode .rating-badge.unknown {
+  background-color: var(--border-color-light);
+  color: var(--text-muted-color);
+}
+
+.dark-mode .confidence-bar-container,
+.dark-mode .probability-bar-container {
+  background-color: var(--border-color-light);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .probability-item.real .probability-bar {
+  background-color: var(--real-bg-alpha);
+}
+
+.dark-mode .probability-item.fake .probability-bar {
+  background-color: var(--fake-bg-alpha);
+}
+
+.dark-mode .probability-value {
+  color: var(--text-color); /* Ensure contrast */
+}
+
+.dark-mode .explain-button {
+  background-color: var(--surface-color);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.dark-mode .explain-button:hover {
+  background-color: var(--primary-bg-alpha);
+}
+
+.dark-mode .claim-item,
+.dark-mode .history-item {
+   border-color: var(--border-color);
+}
+
+.dark-mode .history-button {
+    color: var(--text-color);
+}
+
+.dark-mode .history-button:hover {
+  background-color: var(--primary-bg-alpha);
+}
+
+.dark-mode .clear-history-button {
+  color: var(--text-muted-color);
+}
+
+.dark-mode .clear-history-button:hover {
+  color: var(--fake-color);
+  background-color: var(--fake-bg-alpha);
+}
+
+.dark-mode .feedback-button,
+.dark-mode .label-option {
+  background-color: var(--surface-color);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.dark-mode .feedback-button:hover,
+.dark-mode .label-option:hover {
+  border-color: var(--primary-color);
+  background-color: var(--primary-bg-alpha);
+}
+
+.dark-mode .feedback-button.selected,
+.dark-mode .label-option.selected {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary); /* Use black text on Teal */
+  border-color: var(--primary-color);
+}
+
+.dark-mode .submit-button,
+.dark-mode .submit-feedback {
+  color: var(--text-on-primary); /* Use black text on Teal */
+}
+
+.dark-mode .submit-button:disabled,
+.dark-mode .submit-feedback:disabled {
+  background-color: var(--text-muted-color);
+  color: var(--surface-color); /* Light text on dark muted background */
+  opacity: 0.6;
+}
+
+.dark-mode .modal-overlay,
+.dark-mode .info-panel-overlay {
+  background-color: rgba(0, 0, 0, 0.75); /* Slightly darker overlay */
+}
+
+.dark-mode .explanation-content th,
+.dark-mode .explanation-content td {
+  border-color: var(--border-color);
+}
+
+.dark-mode .explanation-content th {
+  background-color: var(--border-color-light);
+}
+
+.dark-mode .loading-spinner {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.dark-mode .header-button:hover {
+  background-color: var(--primary-bg-alpha);
   color: var(--primary-color);
 }
 
-.info-button {
-  color: var(--gray-dark);
+.dark-mode .error-message {
+  background-color: var(--error-bg-alpha);
+  color: var(--error-color);
+  border-color: var(--error-color);
 }
 
-/* Responsive Design */
+/* ============================================= */
+/* Modal Enhancements (ExplanationModal Specifics) */
+/* ============================================= */
+
+/* Close Button Styling */
+.modal-header .close-button {
+  background: none;
+  border: none;
+  color: var(--text-muted-color); /* Start with muted color */
+  font-size: 1.3rem; /* Slightly larger for easier clicking */
+  cursor: pointer;
+  padding: 0.4rem; /* Increase clickable area */
+  border-radius: 50%; /* Circular hover effect */
+  line-height: 1; /* Prevent extra space */
+  display: flex; /* Align icon properly */
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.modal-header .close-button:hover {
+  color: var(--fake-color); /* Red for close action */
+  background-color: var(--fake-bg-alpha); /* Use alpha background on hover */
+}
+
+/* Explanation Iframe Styling */
+.explanation-iframe {
+  display: block; /* Ensure block behavior */
+  width: 100%; /* Already set inline, but good practice */
+  /* height: 500px; /* Set inline in component */
+  border: 1px solid var(--border-color); /* Add a subtle border */
+  border-radius: 4px; /* Match other elements' border radius */
+  /* background-color: var(--surface-color); /* Optional: Fallback bg, but iframe usually has its own */
+  /* Note: Content inside iframe (from srcDoc) will have its own styles */
+}
+
+/* Explanation Error/Status Message Styling */
+.explanation-error {
+  padding: 1.5rem;
+  margin: 1rem 0; /* Add some vertical space */
+  color: var(--text-muted-color);
+  font-style: italic;
+  text-align: center;
+  border: 1px dashed var(--border-color); /* Use dashed border for distinction */
+  border-radius: var(--border-radius);
+  background-color: var(--border-color-light); /* Slightly different background */
+}
+
+.explanation-error p {
+    margin-bottom: 0.5rem; /* Space between paragraphs */
+}
+
+.explanation-error p:last-child {
+    margin-bottom: 0;
+}
+
+.explanation-error small {
+  display: block; /* Make it take its own line */
+  margin-top: 0.5rem;
+  opacity: 0.8;
+  font-size: 0.85em; /* Slightly smaller */
+  font-style: normal; /* Keep status code non-italic */
+}
+
+/* ============================================= */
+/* Dark Mode Overrides for Explanation Modal     */
+/* ============================================= */
+
+.dark-mode .modal-header .close-button {
+  color: var(--text-muted-color); /* Uses dark muted color */
+}
+
+.dark-mode .modal-header .close-button:hover {
+  color: var(--fake-color); /* Keep red for close */
+  background-color: var(--fake-bg-alpha); /* Uses dark fake alpha */
+}
+
+.dark-mode .explanation-iframe {
+   border-color: var(--border-color); /* Use dark border color */
+   background-color: #ffffff; /* FORCE white background for the iframe area itself */
+}
+
+.dark-mode .explanation-error {
+  color: var(--text-muted-color); /* Uses dark muted color */
+  border-color: var(--border-color); /* Uses dark border color */
+  background-color: var(--border-color-light); /* Uses darker subtle bg */
+}
+
+.dark-mode .explanation-error small {
+   color: var(--text-muted-color); /* Ensure small text color is visible */
+}
+
+/* Optional: Style for the error message in the safeguard */
+.dark-mode .modal-body p:first-child {
+  /* If it's the main error message when explanation is missing */
+  color: var(--text-color); /* Ensure it's readable */
+}
+
+/* ============================================= */
+/* Footer Styles                                 */
+/* ============================================= */
+
+.footer {
+  background-color: var(--surface-color); /* Use surface color, consistent with header/cards */
+  color: var(--text-muted-color);
+  padding: 1.5rem 0; /* Vertical padding */
+  margin-top: auto; /* Pushes footer to bottom if main content doesn't fill viewport */
+  border-top: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.footer-content {
+  max-width: 1000px; /* Match main content width */
+  margin: 0 auto; /* Center content */
+  padding: 0 2rem; /* Horizontal padding */
+  display: flex;
+  justify-content: space-between; /* Copyright left, links right */
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  gap: 1rem; /* Space between items when wrapped */
+}
+
+.footer-content p {
+   margin: 0; /* Reset default paragraph margin */
+   font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem; /* Space between links */
+  flex-wrap: wrap; /* Allow links to wrap if needed */
+}
+
+.footer-links a {
+  color: var(--text-muted-color); /* Subtle link color */
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--primary-color); /* Use primary color on hover */
+  text-decoration: underline;
+}
+
+/* Dark Mode Specific Footer Styles */
+.dark-mode .footer {
+  background-color: var(--surface-color); /* Uses dark surface color */
+  border-top-color: var(--border-color); /* Uses dark border color */
+  color: var(--text-muted-color); /* Uses dark muted text color */
+}
+
+.dark-mode .footer-links a {
+  color: var(--text-muted-color); /* Uses dark muted text color */
+}
+
+.dark-mode .footer-links a:hover {
+  color: var(--primary-color); /* Still use primary teal for hover */
+}
+
+/* Responsive adjustments for Footer */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items */
+    text-align: center;
+    gap: 0.8rem; /* Reduce gap for stacked items */
+    padding: 0 1rem; /* Adjust horizontal padding */
+  }
+
+  .footer-links {
+     justify-content: center; /* Center links when stacked/wrapped */
+     gap: 1rem; /* Adjust gap */
+  }
+}
+
+/* In App.css or ExplanationModal.css */
+
+.explanation-iframe {
+  border: 1px solid #ccc; /* Optional: add a border for clarity */
+  display: block; /* Ensure it takes block layout */
+  margin-top: 10px;
+}
+
+.dark-mode .explanation-iframe {
+   border-color: #555;
+}
+
+/* Ensure modal body has enough space */
+.explanation-modal .explanation-body {
+  min-height: 520px; /* Give space for the iframe */
+}
+
+/* ============================================= */
+/* Responsive Design                             */
+/* ============================================= */
+
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
@@ -889,271 +1467,44 @@ body.dark-mode {
     padding: 1rem;
     text-align: center;
   }
-  
+
   .header-actions {
     width: 100%;
     justify-content: center;
   }
-  
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .input-section,
+  .result-content,
+  .fact-check-section,
+  .feedback-form,
+  .modal-body,
+  .info-panel-content,
+  .search-history-header,
+  .history-button {
+    padding: 1rem; /* Reduce padding on smaller screens */
+  }
+
   .prediction-section {
     flex-direction: column;
     align-items: start;
     gap: 1rem;
   }
-  
+
   .claim-item {
     flex-direction: column;
   }
-  
+
   .claim-rating {
     align-items: flex-start;
     margin-top: 0.5rem;
   }
-}
 
-/* Add to App.css */
-.explanation-content {
-  overflow: auto;
-  max-height: 70vh;
-}
-
-.explanation-content table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.explanation-content th, 
-.explanation-content td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-/* LIME specific styles */
-.explanation-content .lime-info {
-  margin-bottom: 1rem;
-}
-
-.explanation-content .lime-word {
-  display: inline-block;
-  padding: 2px 4px;
-  margin: 2px;
-  border-radius: 3px;
-}
-
-.modal-body {
-  padding: 1rem;
-}
-
-/* Add to App.css */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 900px;
-  max-height: 90vh;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
-}
-
-.modal-body {
-  padding: 1rem;
-  overflow-y: auto;
-  flex: 1;
-}
-
-.dark-mode .modal-content {
-  background-color: #222;
-  color: #eee;
-  border: 1px solid #444;
-}
-
-.explanation-content {
-  overflow: auto;
-}
-
-/* LIME specific styling */
-.explanation-content th,
-.explanation-content td {
-  padding: 4px 8px;
-  border: 1px solid #ddd;
-}
-
-.dark-mode .explanation-content th,
-.dark-mode .explanation-content td {
-  border-color: #444;
-}
-
-/* Add these modifications to your existing CSS */
-
-/* Improved Dark Mode Variables */
-.dark-mode {
-  --primary-color: #63B3ED;
-  --secondary-color: #4299E1;
-  --real-color: #48BB78;
-  --fake-color: #FC8181;
-  --neutral-color: #F6AD55;
-  --text-color: #E2E8F0;
-  --light-bg: #2D3748;
-  --gray-light: #4A5568;
-  --gray: #718096;
-  --gray-dark: #A0AEC0;
-  --border-color: #4A5568;
-}
-
-/* Global Text Contrast Improvements */
-.dark-mode .result-header,
-.dark-mode .probability-item .category,
-.dark-mode .confidence-text,
-.dark-mode .claim-claimant {
-  color: var(--gray-dark) !important;
-}
-
-.dark-mode .error-message {
-  background-color: rgba(252, 129, 129, 0.15);
-  color: var(--fake-color);
-}
-
-.dark-mode .probability-item.real .probability-bar {
-  background-color: rgba(72, 187, 120, 0.3);
-}
-
-.dark-mode .probability-item.fake .probability-bar {
-  background-color: rgba(252, 129, 129, 0.3);
-}
-
-/* Enhanced Interactive Elements */
-.dark-mode .submit-button:hover,
-.dark-mode .explain-button:hover,
-.dark-mode .header-button:hover {
-  filter: brightness(110%);
-}
-
-.dark-mode .text-input {
-  border-color: var(--border-color);
-  transition: var(--transition);
-}
-
-.dark-mode .text-input:focus {
-  box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.3);
-}
-
-/* Aesthetic Improvements */
-.app {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.header {
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.dark-mode .header {
-  border-bottom: 1px solid var(--border-color);
-}
-
-.result-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.result-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Improved Status Indicators */
-.status {
-  transition: opacity 0.3s ease;
-}
-
-.dark-mode .status.online {
-  background-color: rgba(72, 187, 120, 0.15);
-}
-
-.dark-mode .status.offline {
-  background-color: rgba(252, 129, 129, 0.15);
-}
-
-/* Better Contrast for History Items */
-.dark-mode .history-button:hover {
-  background-color: rgba(99, 179, 237, 0.1);
-}
-
-.dark-mode .search-history-header {
-  border-bottom: 1px solid var(--border-color);
-}
-
-/* Enhanced Probability Distribution */
-.probability-bar-container {
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.dark-mode .probability-bar-container {
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Improved Feedback Form */
-.dark-mode .feedback-button {
-  border-color: var(--border-color);
-}
-
-.dark-mode .feedback-button:hover {
-  border-color: var(--primary-color);
-  background-color: rgba(99, 179, 237, 0.1);
-}
-
-/* Better Loading Indicator */
-.loading-spinner {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
-
-.dark-mode .loading-spinner {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-/* Smooth Transitions for All Interactive Elements */
-button, .label-option, .history-button, .feedback-button {
-  transition: var(--transition), filter 0.2s ease;
-}
-
-/* Improved Text Readability in All Modes */
-body {
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-
-.dark-mode body {
-  background-color: #1A202C;
-}
-
-/* Enhanced Card Borders */
-.result-card, .fact-check-section, .feedback-form {
-  border: 1px solid transparent;
-}
-
-.dark-mode .result-card,
-.dark-mode .fact-check-section,
-.dark-mode .feedback-form {
-  border-color: var(--border-color);
+  .feedback-buttons,
+  .label-options {
+    flex-wrap: wrap; /* Allow wrapping */
+  }
 }
