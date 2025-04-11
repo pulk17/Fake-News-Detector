@@ -85,6 +85,14 @@ body {
   color: var(--primary-color);
 }
 
+.logo p{
+  align-items: center;
+  font-size: 1 rem;
+  font-weight: 300;
+  color: var(--text-color);
+  padding-left: 0.5rem;
+}
+
 .logo h1 {
   font-size: 1.5rem;
   font-weight: 600;

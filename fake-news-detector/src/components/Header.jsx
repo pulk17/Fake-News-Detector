@@ -16,7 +16,8 @@ function Header({
     <header className="header">
       <div className="logo">
         <FaNewspaper className="logo-icon" />
-        <h1>Fake News Detector</h1>
+        <h1>BuzzBuster</h1> 
+        <p>A Fake News Dector AI Tool</p>
       </div>
 
       <div className="header-actions">
