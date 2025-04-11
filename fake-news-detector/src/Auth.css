@@ -1,0 +1,354 @@
+/* ============================================= */
+/* Authentication Page Styles                  */
+/* Uses variables from App.css                 */
+/* ============================================= */
+
+/* Style for the auth pages container (Login/Signup) */
+.auth-page {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 2rem; 
+    border: 1px solid var(--border-color); 
+    border-radius: var(--border-radius);
+    background-color: var(--surface-color);
+    box-shadow: var(--shadow);
+    transition: var(--transition); 
+  }
+  
+  /* Dark Mode Override for container */
+  .dark-mode .auth-page {
+    background-color: var(--surface-color); /* From dark mode vars */
+    border-color: var(--border-color); /* From dark mode vars */
+    box-shadow: var(--shadow); /* From dark mode vars */
+  }
+  
+  /* Title styling */
+  .auth-page h2 {
+    text-align: center;
+    margin-bottom: 1.5rem; /* Match input-section h2 */
+    color: var(--text-color);
+    font-weight: 600; /* Match input-section h2 */
+    font-size: 1.5rem; /* Match logo h1 size */
+  }
+  
+  /* Dark Mode Override for title */
+  .dark-mode .auth-page h2 {
+      color: var(--text-color);
+  }
+  
+  /* Input fields styling */
+  .input-group {
+    position: relative;
+    margin-bottom: 1.2rem; /* Consistent spacing */
+  }
+  
+  .input-group svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted-color); /* Muted icon color */
+    font-size: 1rem; /* Slightly smaller icon */
+    z-index: 1; /* Ensure icon is clickable if needed (though not here) */
+  }
+  
+  /* Dark Mode Override for icon */
+  .dark-mode .input-group svg {
+      color: var(--text-muted-color);
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 0.9rem 0.9rem 0.9rem 38px; /* Adjust padding for icon and consistency */
+    border: 1px solid var(--border-color);
+    border-radius: 4px; /* Slightly smaller radius for inputs */
+    font-size: 1rem;
+    box-sizing: border-box;
+    background-color: var(--surface-color); /* Use surface color */
+    color: var(--text-color);
+    transition: var(--transition);
+  }
+  
+  /* Dark Mode Override for input */
+  .dark-mode .input-group input {
+      background-color: var(--border-color-light); /* Slightly different bg for inputs */
+      border-color: var(--border-color);
+      color: var(--text-color);
+  }
+  
+  .input-group input::placeholder {
+    color: var(--text-muted-color);
+    opacity: 0.8;
+  }
+  
+  /* Dark Mode Override for placeholder */
+  .dark-mode .input-group input::placeholder {
+      color: var(--text-muted-color);
+      opacity: 0.7;
+  }
+  
+  /* Focus style similar to text-input */
+  .input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-bg-alpha);
+  }
+  
+  /* Dark Mode Override for focus */
+  .dark-mode .input-group input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--primary-bg-alpha); /* Use dark mode alpha */
+  }
+  
+  /* Auth submit button styling */
+  .auth-button {
+    width: 100%;
+    padding: 0.8rem 1.2rem; /* Slightly adjusted padding */
+    background-color: var(--primary-color);
+    color: var(--text-on-primary); /* Use text-on-primary variable */
+    border: none;
+    border-radius: 4px; /* Match input radius */
+    font-size: 1.1rem;
+    font-weight: 500; /* Match submit-button */
+    cursor: pointer;
+    transition: var(--transition), filter 0.2s ease; /* Match submit-button */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Match submit-button */
+  }
+  
+  .auth-button:hover:not(:disabled) {
+    background-color: var(--secondary-color);
+    filter: brightness(105%); /* Match submit-button hover */
+  }
+  
+  .auth-button:disabled {
+    background-color: var(--text-muted-color); /* Use muted color for disabled */
+    color: var(--surface-color); /* Ensure contrast */
+    cursor: not-allowed;
+    filter: brightness(100%);
+    opacity: 0.7; /* Match submit-button disabled */
+  }
+  
+  /* Dark Mode Override for Auth Button */
+  .dark-mode .auth-button {
+      background-color: var(--primary-color);
+      color: var(--text-on-primary); /* Use dark mode text-on-primary */
+  }
+  .dark-mode .auth-button:hover:not(:disabled) {
+      background-color: var(--secondary-color);
+      filter: brightness(105%);
+  }
+  .dark-mode .auth-button:disabled {
+      background-color: var(--text-muted-color); /* Use dark mode muted color */
+      color: var(--surface-color); /* Use dark mode surface for text */
+      opacity: 0.6; /* Slightly adjusted opacity */
+  }
+  
+  
+  /* Spinner inside button */
+  .auth-button .spinner {
+      animation: spin 1.5s linear infinite; /* Re-use spin animation */
+  }
+  
+  /* Switch link styling */
+  .switch-auth {
+    text-align: center;
+    margin-top: 1.5rem; /* Consistent spacing */
+    font-size: 0.9rem;
+    color: var(--text-muted-color); /* Use muted text */
+  }
+  
+  /* Dark Mode Override for switch text */
+  .dark-mode .switch-auth {
+      color: var(--text-muted-color);
+  }
+  
+  .switch-auth .link-button {
+    background: none;
+    border: none;
+    color: var(--primary-color); /* Use primary color for link */
+    cursor: pointer;
+    text-decoration: none; /* Remove underline by default */
+    padding: 0 4px; /* Add slight padding */
+    font-size: inherit;
+    font-weight: 500; /* Slightly bolder */
+    transition: var(--transition);
+  }
+  
+  .switch-auth .link-button:hover {
+    color: var(--secondary-color); /* Use secondary color on hover */
+    text-decoration: underline; /* Add underline on hover */
+  }
+  
+  /* Dark Mode Override for link button */
+  .dark-mode .switch-auth .link-button {
+      color: var(--primary-color); /* Keep primary color */
+  }
+  .dark-mode .switch-auth .link-button:hover {
+      color: var(--secondary-color); /* Keep secondary color */
+  }
+  
+  
+  /* Error messages specific to auth forms */
+  .auth-error {
+    color: var(--error-color); /* Use error color variable */
+    background-color: var(--error-bg-alpha); /* Use error alpha background */
+    border: 1px solid var(--error-color); /* Match border color */
+    padding: 0.8rem 1rem; /* Adjusted padding */
+    border-radius: 4px; /* Match input radius */
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    display: flex; /* Optional: Align icon if added */
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  /* Dark Mode Override for auth error */
+  .dark-mode .auth-error {
+      color: var(--error-color);
+      background-color: var(--error-bg-alpha); /* Use dark mode alpha */
+      border-color: var(--error-color); /* Border remains error color */
+  }
+  
+  /* Success message for signup */
+  .success-message {
+      color: var(--real-color); /* Use success color */
+      background-color: var(--real-bg-alpha); /* Use success alpha background */
+      border: 1px solid var(--real-color); /* Match border color */
+      padding: 0.8rem 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+  }
+  
+  /* Dark Mode Override for success message */
+  .dark-mode .success-message {
+      color: var(--real-color);
+      background-color: var(--real-bg-alpha); /* Use dark mode alpha */
+      border-color: var(--real-color);
+  }
+  
+  /* ============================================= */
+  /* Header Auth Action Styles                   */
+  /* Based on App.css styles                     */
+  /* ============================================= */
+  
+  /* User email display in header */
+  .header-actions .user-email {
+    margin: 0 0.5rem 0 1rem; /* Adjust spacing */
+    font-size: 0.9rem;
+    color: var(--text-muted-color); /* Use muted color */
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    vertical-align: middle;
+    display: inline-block;
+    transition: var(--transition);
+  }
+  
+  /* Dark Mode Override for user email */
+  .dark-mode .header-actions .user-email {
+      color: var(--text-muted-color); /* Uses dark muted */
+  }
+  
+  /* Login/Signup/Logout buttons in header */
+  .header-button.auth-action-button {
+      /* Inherits .header-button styles */
+      padding: 0.5rem 0.8rem; /* Specific padding */
+      font-size: 0.9rem; /* Slightly smaller */
+      border-radius: 4px; /* Match other buttons */
+      gap: 0.4rem; /* Space between icon/text */
+      color: var(--primary-color); /* Use primary color for emphasis */
+      background-color: transparent; /* Ensure transparent background */
+  }
+  
+  .header-button.auth-action-button:hover {
+      background-color: var(--primary-bg-alpha); /* Use primary alpha on hover */
+      color: var(--primary-color); /* Keep primary color */
+  }
+  
+  /* Dark Mode Override for header auth buttons */
+  .dark-mode .header-button.auth-action-button {
+      color: var(--primary-color); /* Keep primary color */
+  }
+  .dark-mode .header-button.auth-action-button:hover {
+      background-color: var(--primary-bg-alpha); /* Use dark alpha */
+  }
+  
+  
+  /* Logout button specific styling (optional) */
+  .header-button.auth-action-button[title="Logout"]:hover {
+      color: var(--fake-color); /* Use red for logout hover */
+      background-color: var(--fake-bg-alpha);
+  }
+  .dark-mode .header-button.auth-action-button[title="Logout"]:hover {
+      color: var(--fake-color);
+      background-color: var(--fake-bg-alpha); /* Use dark fake alpha */
+  }
+  
+  
+  /* ============================================= */
+  /* Disabled Feedback Form Style                */
+  /* ============================================= */
+  
+  .disabled-feedback {
+      padding: 1.5rem; /* Generous padding */
+      margin-top: 1rem; /* Space from results */
+      border: 1px dashed var(--border-color); /* Dashed border */
+      border-radius: var(--border-radius); /* Match card radius */
+      background-color: var(--border-color-light); /* Subtle background */
+      color: var(--text-muted-color); /* Muted text */
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem; /* Space between icon and text */
+      font-size: 0.95rem;
+      transition: var(--transition);
+  }
+  
+  .disabled-feedback svg { /* Icon style */
+      font-size: 1.1rem;
+      opacity: 0.8;
+  }
+  
+  .disabled-feedback .link-button { /* Style for the login link */
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      font-size: inherit; /* Match surrounding text size */
+      font-weight: 500;
+  }
+  
+  .disabled-feedback .link-button:hover {
+      color: var(--secondary-color);
+  }
+  
+  /* Dark Mode Override for disabled feedback */
+  .dark-mode .disabled-feedback {
+      background-color: var(--border-color-light); /* Use dark subtle bg */
+      border-color: var(--border-color); /* Use dark border */
+      color: var(--text-muted-color); /* Use dark muted text */
+  }
+  
+  .dark-mode .disabled-feedback .link-button {
+      color: var(--primary-color);
+  }
+  
+  .dark-mode .disabled-feedback .link-button:hover {
+      color: var(--secondary-color);
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

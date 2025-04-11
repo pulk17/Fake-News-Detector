@@ -17,7 +17,7 @@ from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassific
 from pymongo import MongoClient 
 from pydantic import BaseModel, Field, EmailStr, ValidationError
 from datetime import datetime, timedelta, timezone 
-import jwt
+import jwt 
 from bson import ObjectId 
 
 load_dotenv() 
@@ -29,7 +29,7 @@ FACT_CHECK_API_KEY = os.getenv("FACT_CHECK_API_KEY")
 GOOGLE_FACT_CHECK_API_URL = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 EXPECTED_LABELS = ["FAKE", "REAL"]
 MONGO_URI = os.getenv("MONGO_URI")
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "fakeNewsDetectorDB") # Default DB name if not in URI/env
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "FakeNewsDetectorDB") # Default DB name if not in URI/env
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
 if not MONGO_URI:
@@ -55,7 +55,7 @@ def get_db():
                  # Increase timeout, adjust pool size as needed
                  mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000, maxPoolSize=50, minPoolSize=5)
                  # The ismaster command is cheap and does not require auth.
-                 mongo_client.admin.command('ismaster')
+                 mongo_client.admin.command('hello')
                  app.logger.info("MongoDB connection successful.")
             g.db = mongo_client[MONGO_DB_NAME] # Select database
         except Exception as e:

@@ -1,23 +1,50 @@
 import React, { useState } from 'react';
-import { FaThumbsUp, FaThumbsDown, FaCheck } from 'react-icons/fa';
+import { FaThumbsUp, FaThumbsDown, FaCheck, FaLock } from 'react-icons/fa';
 
-function FeedbackForm({ onSubmit, submitted, classNames, currentPrediction }) {
+function FeedbackForm({ onSubmit, submitted, classNames, currentPrediction, token, onShowLogin }) {
   const [isPredictionCorrect, setIsPredictionCorrect] = useState(null);
   const [correctLabel, setCorrectLabel] = useState(null);
-  
-  // Get alternative labels (all labels except current prediction)
+  const [submitError, setSubmitError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const alternativeLabels = classNames.filter(label => label !== currentPrediction);
-  
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isPredictionCorrect === null) return;
-    
-    onSubmit(
-      isPredictionCorrect, 
-      !isPredictionCorrect ? correctLabel : null
-    );
+    if (isPredictionCorrect === null || !token) return;
+    setSubmitError(''); // Clear previous errors
+    setIsSubmitting(true); // Add loading state
+
+    try {
+      await onSubmit(
+        isPredictionCorrect,
+        !isPredictionCorrect ? correctLabel : null
+      );
+      // Success is handled by the 'submitted' prop changing
+    } catch (error) {
+      console.error("Feedback submission error:", error);
+      // Display error message to the user
+      setSubmitError(error.toString() || "Failed to submit feedback. Please try again.");
+      
+      // If token is invalid, prompt user to login again
+      if (error.toString().includes("Token is invalid") || 
+          error.toString().includes("Unauthorized") ||
+          error.toString().includes("token")) {
+        setSubmitError("Your session has expired. Please login again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-  
+
+  if (!token) {
+    return (
+      <div className="feedback-form disabled-feedback">
+        <FaLock /> Please <button type="button" className='link-button' onClick={onShowLogin}>login</button> to submit feedback.
+      </div>
+    );
+  }
+
   if (submitted) {
     return (
       <div className="feedback-submitted">
@@ -26,10 +53,11 @@ function FeedbackForm({ onSubmit, submitted, classNames, currentPrediction }) {
       </div>
     );
   }
-  
+
   return (
     <div className="feedback-form">
       <h3>Provide Feedback</h3>
+      {submitError && <p className="error-message">{submitError}</p>}
       <form onSubmit={handleSubmit}>
         <div className="feedback-question">
           <p>Was this prediction correct?</p>
@@ -50,7 +78,7 @@ function FeedbackForm({ onSubmit, submitted, classNames, currentPrediction }) {
             </button>
           </div>
         </div>
-        
+
         {isPredictionCorrect === false && (
           <div className="correct-label-selection">
             <p>What is the correct label?</p>
@@ -68,13 +96,15 @@ function FeedbackForm({ onSubmit, submitted, classNames, currentPrediction }) {
             </div>
           </div>
         )}
-        
-        <button 
-          type="submit" 
-          className="submit-feedback" 
-          disabled={isPredictionCorrect === null || (isPredictionCorrect === false && !correctLabel)}
+
+        <button
+          type="submit"
+          className="submit-feedback"
+          disabled={isPredictionCorrect === null || 
+                   (isPredictionCorrect === false && !correctLabel) ||
+                   isSubmitting}
         >
-          Submit Feedback
+          {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
         </button>
       </form>
     </div>
