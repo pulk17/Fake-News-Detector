@@ -108,7 +108,7 @@ body {
 .header-button {
   background: none;
   border: none;
-  color: var(--text-muted-color); /* Use muted color for less emphasis */
+  color: var(--text-muted-color); 
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 50%;
@@ -124,7 +124,7 @@ body {
   color: var(--primary-color);
 }
 
-.toggle-theme-button { /* Specific color potentially */
+.toggle-theme-button { 
    color: var(--primary-color);
 }
 
@@ -188,7 +188,7 @@ body {
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   margin-bottom: 2rem;
-  border: 1px solid transparent; /* For dark mode border */
+  border: 1px solid transparent; 
   transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -211,8 +211,8 @@ body {
   resize: vertical;
   transition: var(--transition);
   min-height: 120px;
-  background-color: var(--surface-color); /* Ensure background is set */
-  color: var(--text-color); /* Ensure text color is set */
+  background-color: var(--surface-color); 
+  color: var(--text-color); 
 }
 
 .text-input::placeholder {
@@ -251,15 +251,11 @@ body {
 }
 
 .submit-button:disabled {
-  background-color: var(--text-muted-color); /* Use muted color for disabled */
+  background-color: var(--text-muted-color); 
   cursor: not-allowed;
   filter: brightness(100%);
   opacity: 0.7;
 }
-
-/* ============================================= */
-/* Error Message                                 */
-/* ============================================= */
 
 .error-message {
   background-color: var(--error-bg-alpha);
@@ -288,7 +284,7 @@ body {
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   overflow: hidden;
-  border: 1px solid transparent; /* For dark mode */
+  border: 1px solid transparent; 
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -312,8 +308,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border-color); /* Add subtle separator */
-  color: var(--text-color); /* Ensure text color */
+  border-bottom: 1px solid var(--border-color); 
+  color: var(--text-color);
 }
 
 .processing-time {
@@ -371,7 +367,7 @@ body {
   height: 100%;
   background-color: var(--primary-color);
   border-radius: 4px;
-  transition: width 0.5s ease-out; /* Animate width change */
+  transition: width 0.5s ease-out; 
 }
 
 .confidence-text {
@@ -433,15 +429,15 @@ body {
 .probability-bar {
   height: 100%;
   border-radius: 4px;
-  transition: width 0.5s ease-out; /* Animate width change */
+  transition: width 0.5s ease-out;
 }
 
 .probability-item.real .probability-bar {
-  background-color: var(--real-bg-alpha); /* Use alpha */
+  background-color: var(--real-bg-alpha); 
 }
 
 .probability-item.fake .probability-bar {
-  background-color: var(--fake-bg-alpha); /* Use alpha */
+  background-color: var(--fake-bg-alpha); 
 }
 
 /* Overlay solid color on top of alpha background for better visual */
@@ -451,27 +447,27 @@ body {
     top: 0;
     left: 0;
     bottom: 0;
-    width: 100%; /* This covers the parent's width */
+    width: 100%; 
     border-radius: 4px;
 }
 
 .probability-item.real .probability-bar::before {
     background-color: var(--real-color);
-    opacity: 0.6; /* Adjust opacity */
+    opacity: 0.6; 
 }
 
 .probability-item.fake .probability-bar::before {
     background-color: var(--fake-color);
-    opacity: 0.6; /* Adjust opacity */
+    opacity: 0.6; 
 }
 
 .probability-value {
   position: absolute;
   right: 10px;
   font-size: 0.85rem;
-  font-weight: 600; /* Make it bolder */
-  color: var(--text-color); /* Ensure contrast */
-  z-index: 1; /* Sit on top of pseudo-element */
+  font-weight: 600; 
+  color: var(--text-color); 
+  z-index: 1; 
 }
 
 /* ============================================= */
@@ -507,7 +503,7 @@ body {
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   padding: 1.5rem;
-  border: 1px solid transparent; /* For dark mode */
+  border: 1px solid transparent; 
   transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -614,7 +610,7 @@ body {
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   padding: 1.5rem;
-  border: 1px solid transparent; /* For dark mode */
+  border: 1px solid transparent; 
   transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -765,7 +761,7 @@ body {
   box-shadow: var(--shadow);
   margin-top: 2rem;
   overflow: hidden;
-  border: 1px solid transparent; /* For dark mode */
+  border: 1px solid transparent; 
   transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -810,8 +806,8 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 300px; /* Limit height */
-  overflow-y: auto; /* Add scroll */
+  max-height: 300px; 
+  overflow-y: auto; 
 }
 
 .history-item {
@@ -833,7 +829,7 @@ body {
   border: none;
   cursor: pointer;
   transition: var(--transition), filter 0.2s ease;
-  color: var(--text-color); /* Ensure text color */
+  color: var(--text-color); 
 }
 
 .history-button:hover {
@@ -896,7 +892,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* Consistent overlay darkness */
+  background-color: rgba(0, 0, 0, 0.6); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -905,19 +901,19 @@ body {
 
 .modal-content, .info-panel {
   background-color: var(--surface-color);
-  color: var(--text-color); /* Ensure text color */
+  color: var(--text-color); 
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   width: 90%;
-  max-width: 700px; /* Max width for Info Panel */
+  max-width: 700px; 
   max-height: 90vh;
-  overflow: hidden; /* Controlled by inner elements */
+  overflow: hidden; 
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--border-color); /* Add subtle border */
+  border: 1px solid var(--border-color); 
 }
 
-.modal-content { /* Specific modal width if needed */
+.modal-content { 
   max-width: 900px;
 }
 
@@ -927,7 +923,7 @@ body {
   align-items: center;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--border-color-light); /* Subtle header background */
+  background-color: var(--border-color-light); 
 }
 
 .modal-header h2, .info-panel-header h2 {
@@ -936,18 +932,17 @@ body {
   gap: 0.5rem;
   font-weight: 600;
   margin: 0;
-  color: var(--text-color); /* Ensure header text color */
+  color: var(--text-color);
 }
 
-/* Close button styling can go here if needed */
 
 .modal-body, .info-panel-content {
   padding: 1.5rem;
   overflow-y: auto;
-  flex: 1; /* Allow body to grow */
+  flex: 1; 
 }
 
-/* Info Panel Specifics */
+
 .info-section {
   margin-bottom: 2rem;
 }
@@ -963,12 +958,12 @@ body {
 .info-section ul {
   margin-left: 1.5rem;
   margin-top: 0.5rem;
-  padding-left: 1rem; /* Ensure padding */
+  padding-left: 1rem; 
 }
 
 .info-section li {
   margin-bottom: 0.5rem;
-  color: var(--text-color); /* Ensure list item color */
+  color: var(--text-color); 
 }
 
 .info-footer {
@@ -979,22 +974,21 @@ body {
   color: var(--text-muted-color);
 }
 
-/* Explanation Content (inside Modal) */
 .explanation-content {
-  overflow: auto; /* Keep scroll within */
+  overflow: auto;
 }
 
 .explanation-content table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem; /* Spacing */
+  margin-top: 1rem; 
 }
 
 .explanation-content th,
 .explanation-content td {
   border: 1px solid var(--border-color);
   padding: 8px;
-  text-align: left; /* Default alignment */
+  text-align: left;
 }
 
 .explanation-content th {
@@ -1002,7 +996,6 @@ body {
   font-weight: 600;
 }
 
-/* LIME specific styles */
 .explanation-content .lime-info {
   margin-bottom: 1rem;
 }
@@ -1012,7 +1005,6 @@ body {
   padding: 2px 4px;
   margin: 2px;
   border-radius: 3px;
-  /* Colors applied dynamically via JS */
 }
 
 /* ============================================= */
@@ -1051,26 +1043,23 @@ body {
 /* ============================================= */
 
 body.dark-mode {
-  /* Dark Mode Palette - Black/Gray based */
-  --primary-color: #1DCD9F;       /* Keep Teal */
-  --secondary-color: #169976;     /* Keep Dark Teal */
+  --primary-color: #1DCD9F;       
+  --secondary-color: #169976;     
 
-  --background-color: var(--base-black);    /* Black Background */
-  --surface-color: var(--base-dark-gray); /* Dark Gray Surface */
-  --text-color: #e0e0e0;           /* Light Gray Text */
-  --text-muted-color: #a0a0a0;      /* Muted Light Gray Text */
-  --text-on-primary: #000000;       /* Black text on Teal buttons for contrast */
-  --border-color: #444444;         /* Darker Border */
-  --border-color-light: #333333;    /* Slightly lighter dark border/bg */
+  --background-color: var(--base-black);    
+  --surface-color: var(--base-dark-gray); 
+  --text-color: #e0e0e0;           
+  --text-muted-color: #a0a0a0;      
+  --text-on-primary: #000000;       
+  --border-color: #444444;         
+  --border-color-light: #333333;    
 
-  /* Alpha Backgrounds (Dark Mode) */
-  --real-bg-alpha: rgba(39, 174, 96, 0.2);   /* More subtle alpha */
-  --fake-bg-alpha: rgba(231, 76, 60, 0.2);   /* More subtle alpha */
-  --neutral-bg-alpha: rgba(243, 156, 18, 0.2); /* More subtle alpha */
-  --primary-bg-alpha: rgba(29, 205, 159, 0.15);/* More subtle alpha */
+  --real-bg-alpha: rgba(39, 174, 96, 0.2);   
+  --fake-bg-alpha: rgba(231, 76, 60, 0.2);   
+  --neutral-bg-alpha: rgba(243, 156, 18, 0.2); 
+  --primary-bg-alpha: rgba(29, 205, 159, 0.15);
   --error-bg-alpha: var(--fake-bg-alpha);
 
-  /* Darker Shadow */
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
@@ -1087,7 +1076,7 @@ body.dark-mode {
   background-color: var(--surface-color);
   color: var(--text-color);
   box-shadow: var(--shadow);
-  border-color: var(--border-color); /* Use dark border */
+  border-color: var(--border-color); 
 }
 
 .dark-mode .header {
@@ -1102,7 +1091,7 @@ body.dark-mode {
 }
 
 .dark-mode .text-input {
-  background-color: var(--surface-color); /* Ensure input bg matches surface */
+  background-color: var(--surface-color); 
   color: var(--text-color);
   border-color: var(--border-color);
 }
@@ -1114,7 +1103,7 @@ body.dark-mode {
 
 .dark-mode .text-input:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px var(--primary-bg-alpha); /* Use primary alpha */
+  box-shadow: 0 0 0 3px var(--primary-bg-alpha); 
 }
 
 .dark-mode .result-header {
@@ -1175,7 +1164,7 @@ body.dark-mode {
 }
 
 .dark-mode .probability-value {
-  color: var(--text-color); /* Ensure contrast */
+  color: var(--text-color); 
 }
 
 .dark-mode .explain-button {
@@ -1226,25 +1215,25 @@ body.dark-mode {
 .dark-mode .feedback-button.selected,
 .dark-mode .label-option.selected {
   background-color: var(--primary-color);
-  color: var(--text-on-primary); /* Use black text on Teal */
+  color: var(--text-on-primary);
   border-color: var(--primary-color);
 }
 
 .dark-mode .submit-button,
 .dark-mode .submit-feedback {
-  color: var(--text-on-primary); /* Use black text on Teal */
+  color: var(--text-on-primary);
 }
 
 .dark-mode .submit-button:disabled,
 .dark-mode .submit-feedback:disabled {
   background-color: var(--text-muted-color);
-  color: var(--surface-color); /* Light text on dark muted background */
+  color: var(--surface-color);
   opacity: 0.6;
 }
 
 .dark-mode .modal-overlay,
 .dark-mode .info-panel-overlay {
-  background-color: rgba(0, 0, 0, 0.75); /* Slightly darker overlay */
+  background-color: rgba(0, 0, 0, 0.75)
 }
 
 .dark-mode .explanation-content th,
@@ -1279,48 +1268,45 @@ body.dark-mode {
 .modal-header .close-button {
   background: none;
   border: none;
-  color: var(--text-muted-color); /* Start with muted color */
-  font-size: 1.3rem; /* Slightly larger for easier clicking */
+  color: var(--text-muted-color); 
+  font-size: 1.3rem; 
   cursor: pointer;
-  padding: 0.4rem; /* Increase clickable area */
-  border-radius: 50%; /* Circular hover effect */
-  line-height: 1; /* Prevent extra space */
-  display: flex; /* Align icon properly */
+  padding: 0.4rem; 
+  border-radius: 50%; 
+  line-height: 1; 
+  display: flex; 
   align-items: center;
   justify-content: center;
   transition: var(--transition);
 }
 
 .modal-header .close-button:hover {
-  color: var(--fake-color); /* Red for close action */
-  background-color: var(--fake-bg-alpha); /* Use alpha background on hover */
+  color: var(--fake-color); 
+  background-color: var(--fake-bg-alpha); 
 }
 
-/* Explanation Iframe Styling */
+
 .explanation-iframe {
-  display: block; /* Ensure block behavior */
-  width: 100%; /* Already set inline, but good practice */
-  /* height: 500px; /* Set inline in component */
-  border: 1px solid var(--border-color); /* Add a subtle border */
-  border-radius: 4px; /* Match other elements' border radius */
-  /* background-color: var(--surface-color); /* Optional: Fallback bg, but iframe usually has its own */
-  /* Note: Content inside iframe (from srcDoc) will have its own styles */
+  display: block; 
+  width: 100%; 
+  border: 1px solid var(--border-color); 
+  border-radius: 4px; 
 }
 
-/* Explanation Error/Status Message Styling */
+
 .explanation-error {
   padding: 1.5rem;
-  margin: 1rem 0; /* Add some vertical space */
+  margin: 1rem 0; 
   color: var(--text-muted-color);
   font-style: italic;
   text-align: center;
-  border: 1px dashed var(--border-color); /* Use dashed border for distinction */
+  border: 1px dashed var(--border-color); 
   border-radius: var(--border-radius);
-  background-color: var(--border-color-light); /* Slightly different background */
+  background-color: var(--border-color-light); 
 }
 
 .explanation-error p {
-    margin-bottom: 0.5rem; /* Space between paragraphs */
+    margin-bottom: 0.5rem; 
 }
 
 .explanation-error p:last-child {
@@ -1328,11 +1314,11 @@ body.dark-mode {
 }
 
 .explanation-error small {
-  display: block; /* Make it take its own line */
+  display: block; 
   margin-top: 0.5rem;
   opacity: 0.8;
-  font-size: 0.85em; /* Slightly smaller */
-  font-style: normal; /* Keep status code non-italic */
+  font-size: 0.85em; 
+  font-style: normal; 
 }
 
 /* ============================================= */
@@ -1340,33 +1326,32 @@ body.dark-mode {
 /* ============================================= */
 
 .dark-mode .modal-header .close-button {
-  color: var(--text-muted-color); /* Uses dark muted color */
+  color: var(--text-muted-color); 
 }
 
 .dark-mode .modal-header .close-button:hover {
-  color: var(--fake-color); /* Keep red for close */
-  background-color: var(--fake-bg-alpha); /* Uses dark fake alpha */
+  color: var(--fake-color); 
+  background-color: var(--fake-bg-alpha); 
 }
 
 .dark-mode .explanation-iframe {
-   border-color: var(--border-color); /* Use dark border color */
+   border-color: var(--border-color); 
    background-color: #ffffff; /* FORCE white background for the iframe area itself */
 }
 
 .dark-mode .explanation-error {
-  color: var(--text-muted-color); /* Uses dark muted color */
-  border-color: var(--border-color); /* Uses dark border color */
+  color: var(--text-muted-color); 
+  border-color: var(--border-color); 
   background-color: var(--border-color-light); /* Uses darker subtle bg */
 }
 
 .dark-mode .explanation-error small {
-   color: var(--text-muted-color); /* Ensure small text color is visible */
+   color: var(--text-muted-color); 
 }
 
-/* Optional: Style for the error message in the safeguard */
+
 .dark-mode .modal-body p:first-child {
-  /* If it's the main error message when explanation is missing */
-  color: var(--text-color); /* Ensure it's readable */
+  color: var(--text-color); 
 }
 
 /* ============================================= */
@@ -1374,84 +1359,83 @@ body.dark-mode {
 /* ============================================= */
 
 .footer {
-  background-color: var(--surface-color); /* Use surface color, consistent with header/cards */
+  background-color: var(--surface-color); 
   color: var(--text-muted-color);
-  padding: 1.5rem 0; /* Vertical padding */
-  margin-top: auto; /* Pushes footer to bottom if main content doesn't fill viewport */
+  padding: 1.5rem 0; 
+  margin-top: auto; 
   border-top: 1px solid var(--border-color);
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .footer-content {
-  max-width: 1000px; /* Match main content width */
-  margin: 0 auto; /* Center content */
-  padding: 0 2rem; /* Horizontal padding */
+  max-width: 1000px; 
+  margin: 0 auto; 
+  padding: 0 2rem; 
   display: flex;
-  justify-content: space-between; /* Copyright left, links right */
+  justify-content: space-between; 
   align-items: center;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
-  gap: 1rem; /* Space between items when wrapped */
+  flex-wrap: wrap; 
+  gap: 1rem;
 }
 
 .footer-content p {
-   margin: 0; /* Reset default paragraph margin */
+   margin: 0; 
    font-size: 0.9rem;
 }
 
 .footer-links {
   display: flex;
-  gap: 1.5rem; /* Space between links */
-  flex-wrap: wrap; /* Allow links to wrap if needed */
+  gap: 1.5rem; 
+  flex-wrap: wrap; 
 }
 
 .footer-links a {
-  color: var(--text-muted-color); /* Subtle link color */
+  color: var(--text-muted-color); 
   text-decoration: none;
   font-size: 0.9rem;
   transition: var(--transition);
 }
 
 .footer-links a:hover {
-  color: var(--primary-color); /* Use primary color on hover */
+  color: var(--primary-color); 
   text-decoration: underline;
 }
 
-/* Dark Mode Specific Footer Styles */
+
 .dark-mode .footer {
-  background-color: var(--surface-color); /* Uses dark surface color */
-  border-top-color: var(--border-color); /* Uses dark border color */
-  color: var(--text-muted-color); /* Uses dark muted text color */
+  background-color: var(--surface-color); 
+  border-top-color: var(--border-color); 
+  color: var(--text-muted-color); 
 }
 
 .dark-mode .footer-links a {
-  color: var(--text-muted-color); /* Uses dark muted text color */
+  color: var(--text-muted-color); 
 }
 
 .dark-mode .footer-links a:hover {
-  color: var(--primary-color); /* Still use primary teal for hover */
+  color: var(--primary-color); 
 }
 
-/* Responsive adjustments for Footer */
+
 @media (max-width: 768px) {
   .footer-content {
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center items */
+    flex-direction: column; 
+    align-items: center; 
     text-align: center;
-    gap: 0.8rem; /* Reduce gap for stacked items */
-    padding: 0 1rem; /* Adjust horizontal padding */
+    gap: 0.8rem; 
+    padding: 0 1rem; 
   }
 
   .footer-links {
-     justify-content: center; /* Center links when stacked/wrapped */
-     gap: 1rem; /* Adjust gap */
+     justify-content: center; 
+     gap: 1rem; 
   }
 }
 
-/* In App.css or ExplanationModal.css */
 
 .explanation-iframe {
-  border: 1px solid #ccc; /* Optional: add a border for clarity */
-  display: block; /* Ensure it takes block layout */
+  border: 1px solid #ccc; 
+  display: block; 
   margin-top: 10px;
 }
 
@@ -1459,9 +1443,9 @@ body.dark-mode {
    border-color: #555;
 }
 
-/* Ensure modal body has enough space */
+
 .explanation-modal .explanation-body {
-  min-height: 520px; /* Give space for the iframe */
+  min-height: 520px; 
 }
 
 /* ============================================= */
@@ -1493,7 +1477,7 @@ body.dark-mode {
   .info-panel-content,
   .search-history-header,
   .history-button {
-    padding: 1rem; /* Reduce padding on smaller screens */
+    padding: 1rem; 
   }
 
   .prediction-section {
@@ -1513,6 +1497,6 @@ body.dark-mode {
 
   .feedback-buttons,
   .label-options {
-    flex-wrap: wrap; /* Allow wrapping */
+    flex-wrap: wrap; 
   }
 }

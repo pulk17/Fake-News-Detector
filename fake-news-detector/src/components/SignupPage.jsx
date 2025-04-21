@@ -26,7 +26,7 @@ function SignupPage({ onSignupSuccess, onSwitchToLogin, onError }) {
     setIsLoading(true);
     setError('');
     setSuccessMessage('');
-    onError(''); // Clear global error
+    onError(''); 
 
     try {
       const data = await registerUser({ email, password });
@@ -40,7 +40,7 @@ function SignupPage({ onSignupSuccess, onSwitchToLogin, onError }) {
        console.error("Signup Page Error:", err);
        const errorMessage = err.message || 'Registration failed. Please try again.';
        setError(errorMessage);
-       onError(errorMessage); // Set global error
+       onError(errorMessage); 
     } finally {
       setIsLoading(false);
     }

@@ -44,7 +44,7 @@ function FactCheckResults({ factCheckData }) {
     </div>
   );
 }
-// Helper function to determine rating class
+
 function getRatingClass(rating) {
   if (!rating) return 'unknown';
   

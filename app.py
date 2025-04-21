@@ -29,7 +29,7 @@ FACT_CHECK_API_KEY = os.getenv("FACT_CHECK_API_KEY")
 GOOGLE_FACT_CHECK_API_URL = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 EXPECTED_LABELS = ["FAKE", "REAL"]
 MONGO_URI = os.getenv("MONGO_URI")
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "FakeNewsDetectorDB") # Default DB name if not in URI/env
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "FakeNewsDetectorDB") 
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
 if not MONGO_URI:
@@ -52,12 +52,11 @@ def get_db():
         try:
             if mongo_client is None:
                  app.logger.info(f"Attempting to connect to MongoDB: {MONGO_URI[:MONGO_URI.find('@')] if '@' in MONGO_URI else MONGO_URI}...") # Log URI safely
-                 # Increase timeout, adjust pool size as needed
+
                  mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000, maxPoolSize=50, minPoolSize=5)
-                 # The ismaster command is cheap and does not require auth.
                  mongo_client.admin.command('hello')
                  app.logger.info("MongoDB connection successful.")
-            g.db = mongo_client[MONGO_DB_NAME] # Select database
+            g.db = mongo_client[MONGO_DB_NAME] 
         except Exception as e:
             app.logger.error(f"Could not connect to MongoDB: {e}", exc_info=True)
             raise RuntimeError(f"Could not connect to MongoDB: {e}")
@@ -71,10 +70,10 @@ def teardown_db(exception):
 
 # --- Pydantic Validation Models ---
 class UserBase(BaseModel):
-    email: EmailStr # Use EmailStr for automatic email validation
+    email: EmailStr 
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=8) # Ensure password has min length
+    password: str = Field(..., min_length=8)
 
 class UserLogin(UserBase):
     password: str
@@ -84,8 +83,8 @@ class FeedbackCreate(BaseModel):
     prediction: str
     confidence: float
     was_correct: bool
-    correct_label: str | None = None # Use | None for optional field
-    user_id: str | None = None # Optional: Link feedback to user
+    correct_label: str | None = None 
+    user_id: str | None = None 
 
 
 # --- JWT Utilities & Decorator ---
@@ -94,7 +93,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=30) # Default expiry
+        expire = datetime.now(timezone.utc) + timedelta(minutes=30) 
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, algorithm="HS256")
     return encoded_jwt
@@ -105,7 +104,6 @@ def token_required(f):
     @functools.wraps(f)
     def decorated(*args, **kwargs):
         token = None
-        # Check for token in Authorization header (Bearer scheme)
         if 'Authorization' in request.headers:
             auth_header = request.headers['Authorization']
             try:
@@ -121,26 +119,22 @@ def token_required(f):
             return jsonify({"message": "Token is missing!"}), 401
 
         try:
-            # Decode the token using the secret key
             data = jwt.decode(token, JWT_SECRET_KEY, algorithms=["HS256"])
-            # Find user based on decoded data (e.g., email or user_id)
             db_conn = get_db()
             current_user_id = data.get('user_id')
             try:
-                # Attempt to convert user_id from token to ObjectId
                 user_object_id = ObjectId(current_user_id)
-            except Exception: # Catches errors if current_user_id is not a valid ObjectId string
+            except Exception: 
                 app.logger.error(f"Invalid user ID format in token: {current_user_id}")
                 return jsonify({"message": "Token contains invalid user identifier!"}), 401
 
             current_user = db_conn.users.find_one({"_id": user_object_id})
             if current_user is None:
-                app.logger.warning(f"User ID {current_user_id} from token not found in DB.") # Log before returning
+                app.logger.warning(f"User ID {current_user_id} from token not found in DB.")
                 return jsonify({"message": "User not found!"}), 401
-            g.current_user = current_user # Store user in Flask's g for access in route
+            g.current_user = current_user 
 
-            # Pass validated string ID to g.current_user_id if needed elsewhere
-            g.current_user_id = str(current_user['_id']) # Use str() to ensure it's a string
+            g.current_user_id = str(current_user['_id']) 
 
         except jwt.ExpiredSignatureError:
             app.logger.info("Token has expired.")
@@ -209,7 +203,6 @@ def load_config_model_and_init():
         app.logger.info("Tokenizer loaded successfully.")
 
         app.logger.info(f"Loading model from: {SAVED_MODEL_PATH}")
-        # Ensure num_labels matches the loaded map
         num_labels = len(class_names)
         model = DistilBertForSequenceClassification.from_pretrained(SAVED_MODEL_PATH, num_labels=num_labels)
         model.to(device) 
@@ -241,32 +234,25 @@ def get_prediction_probabilities(texts):
         return None 
 
     try:
-        # Handle single string input by wrapping it in a list
         is_single_input = isinstance(texts, str)
         input_texts = [texts] if is_single_input else texts
 
-        # Tokenize the batch of texts
         inputs = tokenizer(input_texts,
                            padding=True,       
                            truncation=True,     
                            max_length=512,
                            return_tensors="pt") 
 
-        # Move inputs to the same device as the model
         inputs = {k: v.to(device) for k, v in inputs.items()}
 
-        # Perform inference without calculating gradients
         with torch.no_grad():
             outputs = model(**inputs)
             logits = outputs.logits
 
-        # Apply softmax to convert logits to probabilities
         probabilities = torch.softmax(logits, dim=-1)
 
-        # Move probabilities to CPU and convert to numpy array
         probabilities_np = probabilities.cpu().numpy()
 
-        # If input was single string, return only the first row of probabilities
         return probabilities_np[0] if is_single_input else probabilities_np
 
     except Exception as e:
@@ -283,15 +269,13 @@ def lime_predictor_wrapper(texts):
     Output: numpy array of probabilities (num_texts, num_classes)
     """
     try:
-        # Get predictions from the model
         probs = get_prediction_probabilities(texts)
         
         if probs is None:
             app.logger.error("LIME: Prediction failed for batch. Using uniform probabilities.")
-            # Return array of correct shape with dummy values to avoid crashing LIME
+            
             return np.full((len(texts), len(class_names)), 1.0 / len(class_names))
         elif isinstance(probs, np.ndarray) and len(probs.shape) == 1:
-            # If only one prediction (single text), reshape to 2D
             if len(texts) == 1:
                 return probs.reshape(1, -1)
             else:
@@ -327,7 +311,7 @@ def call_google_fact_check(query):
         
         claims = results.get('claims', [])
         simplified_claims = []
-        for claim in claims[:3]: # Return top 3 claims for brevity
+        for claim in claims[:3]: 
             simplified_claims.append({
                 "text": claim.get('text'),
                 "claimant": claim.get('claimant'),
@@ -356,18 +340,16 @@ def call_google_fact_check(query):
 # --- Feedback Handling (MongoDB Version) ---
 def record_feedback_mongodb(feedback_data: FeedbackCreate):
     """Records feedback to MongoDB."""
-    # Validation already done by Pydantic in the route
     db_conn = get_db()
-    feedback_collection = db_conn.feedback # Assuming 'feedback' collection
+    feedback_collection = db_conn.feedback 
 
-    feedback_entry = feedback_data.model_dump() # Convert Pydantic model to dict
+    feedback_entry = feedback_data.model_dump()
     feedback_entry['timestamp'] = datetime.now(timezone.utc)
 
     # Ensure correct_label consistency
     if feedback_data.was_correct:
         feedback_entry['correct_label'] = feedback_entry['prediction']
     elif not feedback_data.correct_label:
-         # Should be caught by validation logic in route if needed, but double-check
          return False, "correct_label must be provided if was_correct is false."
 
     try:
@@ -394,28 +376,27 @@ def register_user():
          return jsonify({"error": "Request must be JSON"}), 415
 
     db_conn = get_db()
-    users_collection = db_conn.users # Assuming 'users' collection
+    users_collection = db_conn.users 
 
     # Check if user already exists
     existing_user = users_collection.find_one({"email": user_data.email})
     if existing_user:
         app.logger.warning(f"Registration attempt for existing email: {user_data.email}")
-        raise Conflict("User with this email already exists.") # 409 Conflict
+        raise Conflict("User with this email already exists.") 
 
     # Hash the password
     hashed_password = generate_password_hash(user_data.password)
 
     try:
-        # Insert new user (convert Pydantic model to dict)
-        user_dict = user_data.model_dump() # Use model_dump() for Pydantic v2+
-        user_dict['password'] = hashed_password # Store hashed password
+        user_dict = user_data.model_dump() 
+        user_dict['password'] = hashed_password 
         user_dict['created_at'] = datetime.now(timezone.utc)
 
         result = users_collection.insert_one(user_dict)
         app.logger.info(f"User registered successfully: {user_data.email}, ID: {result.inserted_id}")
         return jsonify({
             "message": "User registered successfully",
-            "user_id": str(result.inserted_id) # Return user ID as string
+            "user_id": str(result.inserted_id) 
         }), 201
     except Exception as e:
         app.logger.error(f"Error inserting user into MongoDB: {e}", exc_info=True)
@@ -441,17 +422,16 @@ def login_user():
 
     if not user:
         app.logger.warning(f"Login failed: User not found for email {login_data.email}")
-        raise Unauthorized("Invalid credentials.") # Keep error generic
+        raise Unauthorized("Invalid credentials.") 
 
     # Check password
     if check_password_hash(user['password'], login_data.password):
-        # Passwords match - create JWT
         token_payload = {
-            'user_id': str(user['_id']), # Include user ID (convert ObjectId to str)
+            'user_id': str(user['_id']), 
             'email': user['email']
-            # Add other claims like roles if needed
+            
         }
-        access_token = create_access_token(data=token_payload, expires_delta=timedelta(hours=1)) # e.g., 1 hour expiry
+        access_token = create_access_token(data=token_payload, expires_delta=timedelta(hours=1)) 
         app.logger.info(f"User logged in successfully: {login_data.email}")
         return jsonify(access_token=access_token)
     else:
@@ -476,13 +456,12 @@ def predict_route():
     # --- 1. Get prediction from LOCAL model ---
     probabilities = get_prediction_probabilities(input_text) 
     if probabilities is None:
-         # Check if model/tokenizer failed loading vs. prediction error
          if not model or not tokenizer:
              app.logger.error("Prediction failed because model or tokenizer is not loaded.")
-             return jsonify({"error": "Prediction failed: Model or Tokenizer not available."}), 503 # Service Unavailable (misconfigured)
+             return jsonify({"error": "Prediction failed: Model or Tokenizer not available."}), 503 
          else:
             app.logger.error("Prediction failed during execution of get_prediction_probabilities.")
-            return jsonify({"error": "Prediction failed due to an internal error."}), 500 # Internal Server Error
+            return jsonify({"error": "Prediction failed due to an internal error."}), 500 
 
     predicted_class_id = np.argmax(probabilities)
     confidence = probabilities[predicted_class_id]
@@ -565,14 +544,9 @@ def feedback_route():
         return jsonify({"error": "Request must be JSON"}), 415
 
     try:
-        # Directly attempt to validate and create the Pydantic model
         feedback_data = FeedbackCreate(**request.get_json())
 
-        # --- Specific Logic Validation (AFTER basic Pydantic validation) ---
-        # Check was_correct / correct_label combination
         if not feedback_data.was_correct and not feedback_data.correct_label:
-             # Use werkzeug's BadRequest or return a custom JSON response
-             # raise BadRequest("If 'was_correct' is false, 'correct_label' must be provided.")
              app.logger.warning("Feedback validation failed: correct_label missing when was_correct is false.")
              return jsonify({"error": "Input validation failed", "details": {"correct_label": ["If 'was_correct' is false, 'correct_label' must be provided."]}}), 400
 
@@ -586,7 +560,7 @@ def feedback_route():
              feedback_data.user_id = g.current_user_id
         else:
              app.logger.warning("Could not retrieve user_id from context (g) for feedback.")
-             feedback_data.user_id = None # Explicitly set to None
+             feedback_data.user_id = None 
 
         # --- Call the function to record the feedback ---
         success, message = record_feedback_mongodb(feedback_data)
@@ -594,7 +568,6 @@ def feedback_route():
         if success:
             return jsonify({"status": "success", "message": message}), 201
         else:
-            # If record_feedback_mongodb returns specific error messages, use them
             status_code = 500 
             if "Invalid" in message: 
                 status_code = 400
@@ -623,7 +596,7 @@ def config_route():
 def health_check():
      db_conn = get_db()
      try:
-         db_conn.admin.command('ping') # Check DB connection
+         db_conn.admin.command('ping') 
      except Exception:
          return jsonify(status='unhealthy: db connection failed'), 503
      return jsonify(status='ok'), 200
@@ -649,19 +622,16 @@ def handle_not_found(e):
     app.logger.warning(f"Not Found: {e.description}")
     return jsonify(error=e.description), 404
 
-@app.errorhandler(ValidationError) # Handle Pydantic validation errors globally
+@app.errorhandler(ValidationError) 
 def handle_pydantic_validation_error(e):
      app.logger.warning(f"Pydantic Validation Error: {e.errors()}")
      return jsonify({"error": "Input validation failed", "details": e.errors()}), 400
 
-@app.errorhandler(Exception) # Generic error handler
+@app.errorhandler(Exception)
 def handle_generic_exception(e):
-    # Avoid logging known HTTP exceptions again if already handled
     from werkzeug.exceptions import HTTPException
     if isinstance(e, HTTPException):
-        # Pass through HTTP exceptions (already logged potentially)
         return e
-    # Log unexpected errors
     app.logger.error(f"An unexpected error occurred: {e}", exc_info=True)
     return jsonify(error="An internal server error occurred."), 500
 
@@ -676,7 +646,6 @@ if __name__ == '__main__':
         import sys
         sys.exit(1)
     except Exception as e:
-        # Catch any other unexpected errors during startup
         app.logger.critical(f"An unexpected error occurred during startup: {e}", exc_info=True)
         import sys
         sys.exit(1)

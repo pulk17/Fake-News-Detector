@@ -21,7 +21,6 @@ function Header({
       </div>
 
       <div className="header-actions">
-         {/* Server Status (keep as is) */}
          <div className="server-status">
              {serverConfig ? (
                  <div className="status online">
@@ -34,7 +33,6 @@ function Header({
              )}
          </div>
 
-        {/* Dark Mode Toggle (keep as is) */}
         <button
           className="header-button toggle-theme-button"
           onClick={onToggleDarkMode}
@@ -43,7 +41,6 @@ function Header({
           {darkMode ? <FaSun /> : <FaMoon />}
         </button>
 
-        {/* Info Button (keep as is) */}
         <button
           className="header-button info-button"
           onClick={onInfoClick}

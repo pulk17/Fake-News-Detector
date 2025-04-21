@@ -12,21 +12,18 @@ function FeedbackForm({ onSubmit, submitted, classNames, currentPrediction, toke
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isPredictionCorrect === null || !token) return;
-    setSubmitError(''); // Clear previous errors
-    setIsSubmitting(true); // Add loading state
+    setSubmitError(''); 
+    setIsSubmitting(true); 
 
     try {
       await onSubmit(
         isPredictionCorrect,
         !isPredictionCorrect ? correctLabel : null
       );
-      // Success is handled by the 'submitted' prop changing
     } catch (error) {
       console.error("Feedback submission error:", error);
-      // Display error message to the user
       setSubmitError(error.toString() || "Failed to submit feedback. Please try again.");
       
-      // If token is invalid, prompt user to login again
       if (error.toString().includes("Token is invalid") || 
           error.toString().includes("Unauthorized") ||
           error.toString().includes("token")) {

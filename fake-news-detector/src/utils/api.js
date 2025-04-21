@@ -1,7 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
-// Helper function to get token from localStorage
-
 const getToken = () => {
   const token = localStorage.getItem('authToken');
   if (!token) {
@@ -23,9 +21,8 @@ export const analyzeText = async (text) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // No token needed for prediction in this setup
     },
-    body: JSON.stringify({ text, explain: true }), // Assuming explain is always true now
+    body: JSON.stringify({ text, explain: true }), 
   });
 
   if (!response.ok) {
@@ -68,9 +65,7 @@ export const submitFeedback = async (feedbackData) => {
       
       console.error("SubmitFeedback API Error Response:", errorData);
       
-      // Better error handling
       if (response.status === 401) {
-        // Clear the invalid token
         localStorage.removeItem('authToken');
         throw new Error(errorData?.message || "Unauthorized: Token is invalid or expired.");
       }
@@ -102,7 +97,7 @@ export const loginUser = async (credentials) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(credentials), // { email, password }
+    body: JSON.stringify(credentials), 
   });
 
   if (!response.ok) {
@@ -116,7 +111,7 @@ export const loginUser = async (credentials) => {
     throw new Error(errorData?.error || `Login failed (status ${response.status})`);
   }
 
-  return response.json(); // Expecting { access_token: "..." }
+  return response.json(); 
 };
 
 export const registerUser = async (userData) => {
@@ -125,10 +120,10 @@ export const registerUser = async (userData) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(userData), // { email, password }
+    body: JSON.stringify(userData), 
   });
 
-   if (!response.ok && response.status !== 201) { // 201 is success for register
+   if (!response.ok && response.status !== 201) { 
      let errorData;
      try {
         errorData = await response.json();
@@ -139,5 +134,5 @@ export const registerUser = async (userData) => {
       throw new Error(errorData?.error || `Registration failed (status ${response.status})`);
     }
 
-  return response.json(); // Expecting { message: "...", user_id: "..." }
+  return response.json(); 
 };

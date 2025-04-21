@@ -12,12 +12,12 @@ function LoginPage({ onLoginSuccess, onSwitchToSignup, onError }) {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    onError(''); // Clear global error
+    onError(''); 
 
     try {
       const data = await loginUser({ email, password });
       if (data.access_token) {
-        onLoginSuccess(data.access_token, email); // Pass token and email up
+        onLoginSuccess(data.access_token, email); 
       } else {
         throw new Error("Login response did not contain access token.");
       }
@@ -25,7 +25,7 @@ function LoginPage({ onLoginSuccess, onSwitchToSignup, onError }) {
       console.error("Login Page Error:", err);
       const errorMessage = err.message || 'Login failed. Please check your credentials.';
       setError(errorMessage);
-      onError(errorMessage); // Set global error as well
+      onError(errorMessage); 
     } finally {
       setIsLoading(false);
     }

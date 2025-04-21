@@ -18,7 +18,6 @@ import useLocalStorage from './hooks/useLocalStorage';
 import { analyzeText, getServerConfig, submitFeedback } from './utils/api'; 
 
 
-// Helper to decode JWT (basic, only gets payload, doesn't verify signature)
 const decodeJwt = (token) => {
   try {
     return JSON.parse(atob(token.split('.')[1]));
@@ -44,13 +43,12 @@ function App() {
   const [showLowConfidencePrompt, setShowLowConfidencePrompt] = useState(false);
 
   // --- Authentication State ---
-  const [token, setToken] = useState(() => localStorage.getItem('authToken')); // Store token
-  const [userEmail, setUserEmail] = useLocalStorage('userEmail', null); // Store user email
-  const [currentView, setCurrentView] = useState('main'); // 'main', 'login', 'signup'
+  const [token, setToken] = useState(() => localStorage.getItem('authToken')); 
+  const [userEmail, setUserEmail] = useLocalStorage('userEmail', null); 
+  const [currentView, setCurrentView] = useState('main'); 
 
   // --- Effects ---
 
-  // Fetch server config (no change needed)
   useEffect(() => {
     const fetchConfig = async () => {
       try {
@@ -58,19 +56,18 @@ function App() {
         setServerConfig(config);
       } catch (err) {
         console.error('Error fetching server config:', err);
-         setError('Could not connect to the API. Please try again later.'); // Inform user
+         setError('Could not connect to the API. Please try again later.'); 
       }
     };
     fetchConfig();
   }, []);
 
-   // Check token validity on load 
    useEffect(() => {
     if (token) {
       const decoded = decodeJwt(token);
       if (!decoded || decoded.exp * 1000 < Date.now()) {
         console.log("Token expired or invalid on load, logging out.");
-        handleLogout(); // Use handleLogout which now clears localStorage
+        handleLogout(); 
       } else {
         if (!userEmail && decoded?.email) {
           setUserEmail(decoded.email);
@@ -78,11 +75,10 @@ function App() {
         console.log("User appears logged in with token:", token ? token.substring(0, 10) + '...' : 'None');
       }
     }
-    // Add handleLogout to dependency array if it's defined with useCallback, otherwise be careful
   }, [token, userEmail, setUserEmail]);
 
 
-  // Apply dark mode (no change needed)
+  // Apply dark mode 
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark-mode');
@@ -98,7 +94,7 @@ function App() {
     if (!inputText.trim()) return;
 
     setIsLoading(true);
-    setError(null); // Clear previous errors
+    setError(null); 
     setResult(null);
     setFeedbackSubmitted(false);
     setShowLowConfidencePrompt(false);
@@ -107,10 +103,9 @@ function App() {
       const data = await analyzeText(inputText); // Uses api.js
       setResult(data);
 
-      if (data.prediction.confidence < 0.95) { // Confidence check remains
+      if (data.prediction.confidence < 0.95) { 
         setShowLowConfidencePrompt(true);
       }
-      // Update history (remains)
       const newHistoryItem = {
         text: inputText,
         timestamp: new Date().toISOString(),
@@ -129,40 +124,35 @@ function App() {
   };
 
   const handleFeedbackSubmit = useCallback(async (wasPredictionCorrect, correctLabel) => {
-     // No result or no token? Don't proceed. The form UI should prevent this, but double-check.
      if (!result || !token) {
         setError("Cannot submit feedback: No result available or not logged in.");
-        return Promise.reject("Not logged in or no result"); // Return a rejected promise
+        return Promise.reject("Not logged in or no result"); 
      }
 
-     // NOTE: We no longer set feedbackSubmitted=true *before* the API call
-     // because the form now handles its own loading/submitted state internally
-     // if an error occurs during submission.
 
      try {
        const feedbackPayload = {
-          text: inputText, // Make sure inputText corresponds to the 'result'
+          text: inputText, 
           prediction: result.prediction.label,
           confidence: result.prediction.confidence,
           was_correct: wasPredictionCorrect,
-          // Send correctLabel only if prediction was incorrect
           correct_label: !wasPredictionCorrect ? correctLabel : null
         };
 
        console.log("Submitting feedback with payload:", feedbackPayload);
        console.log("Using token:", token ? token.substring(0,10) + '...' : 'None');
 
-       await submitFeedback(feedbackPayload); // Uses api.js which now includes token
+       await submitFeedback(feedbackPayload); 
 
-       setFeedbackSubmitted(true); // Set submitted state ONLY on successful API call
-       setError(null); // Clear any previous errors on success
-       return Promise.resolve(); // Indicate success
+       setFeedbackSubmitted(true); 
+       setError(null); 
+       return Promise.resolve(); 
 
      } catch (err) {
        console.error('Error submitting feedback in App.jsx:', err);
-       setError(`Feedback submission failed: ${err.message}`); // Show error globally
-       setFeedbackSubmitted(false); // Ensure form is not stuck in submitted state on error
-       return Promise.reject(err.message); // Propagate error message
+       setError(`Feedback submission failed: ${err.message}`); 
+       setFeedbackSubmitted(false); 
+       return Promise.reject(err.message); 
      }
   }, [result, token, inputText, setError, setFeedbackSubmitted]); 
 
@@ -172,8 +162,8 @@ function App() {
     localStorage.setItem('authToken', newToken);
     setToken(newToken);
     setUserEmail(email);
-    setCurrentView('main'); // Switch back to main view after login
-    setError(null); // Clear any previous login/signup errors
+    setCurrentView('main'); 
+    setError(null); 
     console.log("Login successful, email:", email);
   };
 
@@ -181,16 +171,13 @@ function App() {
     localStorage.removeItem('authToken');
     setToken(null);
     setUserEmail(null);
-    setCurrentView('main'); // Go back to main view
+    setCurrentView('main');
     setError(null);
     console.log("User logged out.");
   };
 
   const handleSignupSuccess = () => {
-      // Decide what to do after successful signup
-      // Option 1: Switch to login view automatically
       setCurrentView('login');
-      // Option 2: Keep them on signup page with a success message (handled in SignupPage)
       setError(null); 
       console.log("Signup reported success, switching to login view.");
   };
@@ -200,8 +187,7 @@ function App() {
   const showSignup = () => setCurrentView('signup');
   const showMain = () => setCurrentView('main');
 
-
-  // --- Other Handlers (Keep existing ones) ---
+  // --- Other Handlers 0---
   const handleHistoryItemClick = (text) => {
     setInputText(text);
     setCurrentView('main'); 
@@ -267,20 +253,16 @@ function App() {
               </form>
             </section>
 
-             {/* Global Error Display */}
-             {error && !isLoading && ( // Don't show analysis errors while loading new analysis
+             {error && !isLoading && ( 
                  <div className="error-message global-error"> 
                      <FaExclamationTriangle /> {error}
                  </div>
              )}
 
-
-            {/* Loading Indicator */}
             {isLoading && (
               <LoadingIndicator message="Analyzing content, generating explanation, and checking facts..." />
             )}
 
-             {/* Low Confidence Prompt */}
              {showLowConfidencePrompt && !isLoading && result && (
                  <div className="info-message low-confidence-prompt">
                       <FaExclamationTriangle />
@@ -291,21 +273,19 @@ function App() {
              )}
 
 
-            {/* Results Section */}
             {result && !isLoading && (
               <section className="results-section">
                 <ResultCard
                   prediction={result.prediction}
                   processingTime={result.processing_time_seconds != null ? result.processing_time_seconds.toFixed(2) : 'N/A'}
                   onExplainClick={handleExplainClick}
-                  isExplanationAvailable={result.explanation?.status === 'success' && !!result.explanation?.html} // Check HTML exists too
+                  isExplanationAvailable={result.explanation?.status === 'success' && !!result.explanation?.html} 
                 />
 
                 {result.fact_check?.status === 'success' && result.fact_check.claims?.length > 0 && (
                   <FactCheckResults factCheckData={result.fact_check} />
                 )}
 
-                {/* Pass token to FeedbackForm */}
                 <FeedbackForm
                   onSubmit={handleFeedbackSubmit}
                   submitted={feedbackSubmitted}
@@ -317,7 +297,6 @@ function App() {
               </section>
             )}
 
-            {/* Search History */}
             {searchHistory.length > 0 && (
               <section className="history-section">
                 <SearchHistory
@@ -340,7 +319,6 @@ function App() {
         onInfoClick={() => setShowInfoPanel(true)}
         darkMode={darkMode}
         onToggleDarkMode={toggleDarkMode}
-        // Pass auth state and handlers to Header
         token={token}
         userEmail={userEmail}
         onShowLogin={showLogin}
@@ -352,7 +330,6 @@ function App() {
         {renderView()}
       </main>
 
-      {/* Modals and Panels (keep existing ones) */}
       {showExplanation && result?.explanation && (
         <ExplanationModal
           explanation={result.explanation}
